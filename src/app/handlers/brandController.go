@@ -1,7 +1,7 @@
-package controllers
+package handlers
 
 import (
-	"kredit_plus/src/models"
+	"kredit_plus/src/app/entities"
 	"net/http"
 	"time"
 
@@ -19,12 +19,12 @@ type brandInput struct {
 // @Description Get a list of Brand.
 // @Tags Brand
 // @Produce json
-// @Success 200 {object} []models.Brand
+// @Success 200 {object} []entities.Brand
 // @Router /brands [get]
 func GetAllBrand(c *gin.Context) {
 	// get db from gin context
 	db := c.MustGet("db").(*gorm.DB)
-	var merks []models.Brand
+	var merks []entities.Brand
 	db.Find(&merks)
 
 	c.JSON(http.StatusOK, gin.H{"data": merks})
@@ -38,7 +38,7 @@ func GetAllBrand(c *gin.Context) {
 // @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
 // @Security BearerToken
 // @Produce json
-// @Success 200 {object} models.Brand
+// @Success 200 {object} entities.Brand
 // @Router /brands [post]
 func CreateBrand(c *gin.Context) {
 	// Validate input
@@ -50,10 +50,10 @@ func CreateBrand(c *gin.Context) {
 
 	// Get user active info
 	user, _ := c.Get("user")
-	users := user.(models.User)
+	users := user.(entities.User)
 
 	// Create Brand
-	merk := models.Brand{UserID: users.ID, Name: input.Name, Description: input.Description}
+	merk := entities.Brand{UserID: users.ID, Name: input.Name, Description: input.Description}
 	db := c.MustGet("db").(*gorm.DB)
 	db.Create(&merk)
 
@@ -66,10 +66,10 @@ func CreateBrand(c *gin.Context) {
 // @Tags Brand
 // @Produce json
 // @Param id path string true "Brand id"
-// @Success 200 {object} models.Brand
+// @Success 200 {object} entities.Brand
 // @Router /brands/{id} [get]
 func GetBrandById(c *gin.Context) { // Get model if exist
-	var merk models.Brand
+	var merk entities.Brand
 
 	db := c.MustGet("db").(*gorm.DB)
 	if err := db.Where("id = ?", c.Param("id")).First(&merk).Error; err != nil {
@@ -86,10 +86,10 @@ func GetBrandById(c *gin.Context) { // Get model if exist
 // @Tags Brand
 // @Produce json
 // @Param id path string true "Brand id"
-// @Success 200 {object} []models.Phone
+// @Success 200 {object} []entities.Phone
 // @Router /brands/{id}/phones [get]
 func GetPhonesByBrandId(c *gin.Context) { // Get model if exist
-	var phones []models.Phone
+	var phones []entities.Phone
 
 	db := c.MustGet("db").(*gorm.DB)
 
@@ -110,13 +110,13 @@ func GetPhonesByBrandId(c *gin.Context) { // Get model if exist
 // @Produce json
 // @Param id path string true "Brand id"
 // @Param Body body brandInput true "the body to update age merk category"
-// @Success 200 {object} models.Brand
+// @Success 200 {object} entities.Brand
 // @Router /brands/{id} [patch]
 func UpdateBrand(c *gin.Context) {
 
 	db := c.MustGet("db").(*gorm.DB)
 	// Get model if exist
-	var merk models.Brand
+	var merk entities.Brand
 	if err := db.Where("id = ?", c.Param("id")).First(&merk).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
@@ -131,9 +131,9 @@ func UpdateBrand(c *gin.Context) {
 
 	// Get user active
 	user, _ := c.Get("user")
-	users := user.(models.User)
+	users := user.(entities.User)
 
-	var updatedInput models.Brand
+	var updatedInput entities.Brand
 	updatedInput.Name = input.Name
 	updatedInput.UserID = users.ID
 	updatedInput.Description = input.Description
@@ -157,7 +157,7 @@ func UpdateBrand(c *gin.Context) {
 func DeleteBrand(c *gin.Context) {
 	// Get model if exist
 	db := c.MustGet("db").(*gorm.DB)
-	var merk models.Brand
+	var merk entities.Brand
 	if err := db.Where("id = ?", c.Param("id")).First(&merk).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return

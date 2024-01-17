@@ -3,7 +3,7 @@ package main
 import (
 	"kredit_plus/config"
 	"kredit_plus/docs"
-	"kredit_plus/routes"
+	"kredit_plus/src/routes"
 	"kredit_plus/utils"
 	"log"
 

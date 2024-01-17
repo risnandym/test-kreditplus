@@ -1,9 +1,9 @@
-package controllers
+package handlers
 
 import (
 	"errors"
 	"fmt"
-	"kredit_plus/src/models"
+	"kredit_plus/src/app/entities"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -42,12 +42,11 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	u := models.User{}
-
+	u := entities.User{}
 	u.Username = input.Username
 	u.Password = input.Password
 
-	token, err := models.LoginCheck(u.Username, u.Password, db)
+	token, err := entities.LoginCheck(u.Username, u.Password, db)
 
 	if err != nil {
 		fmt.Println(err)
@@ -81,7 +80,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	u := models.User{}
+	u := entities.User{}
 
 	u.Username = input.Username
 	u.Email = input.Email
@@ -128,7 +127,7 @@ func RegisterAdmin(c *gin.Context) {
 		return
 	}
 
-	u := models.User{}
+	u := entities.User{}
 
 	u.Username = input.Username
 	u.Email = input.Email
@@ -166,7 +165,7 @@ func RegisterAdmin(c *gin.Context) {
 // @Security BearerToken
 // @Produce json
 // @Param Body body ChangePasswordInput true "the body to update age merk category"
-// @Success 200 {object} models.User
+// @Success 200 {object} entities.User
 // @Router /change-password [patch]
 func UpdatePassword(c *gin.Context) {
 
@@ -177,9 +176,9 @@ func UpdatePassword(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	u := new(models.User)
+	u := new(entities.User)
 	user, _ := c.Get("user")
-	users := user.(models.User)
+	users := user.(entities.User)
 
 	hashed, _ := u.GeneratePassword(input.Password)
 

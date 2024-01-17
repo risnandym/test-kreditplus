@@ -1,7 +1,7 @@
-package controllers
+package handlers
 
 import (
-	"kredit_plus/src/models"
+	"kredit_plus/src/app/entities"
 	"net/http"
 	"time"
 
@@ -25,12 +25,12 @@ type specInput struct {
 // @Description Get a list of Spec.
 // @Tags Spec
 // @Produce json
-// @Success 200 {object} []models.Spec
+// @Success 200 {object} []entities.Spec
 // @Router /specs [get]
 func GetAllSpec(c *gin.Context) {
 	// get db from gin context
 	db := c.MustGet("db").(*gorm.DB)
-	var specs []models.Spec
+	var specs []entities.Spec
 	db.Find(&specs)
 
 	c.JSON(http.StatusOK, gin.H{"data": specs})
@@ -44,7 +44,7 @@ func GetAllSpec(c *gin.Context) {
 // @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
 // @Security BearerToken
 // @Produce json
-// @Success 200 {object} models.Spec
+// @Success 200 {object} entities.Spec
 // @Router /specs [post]
 func CreateSpec(c *gin.Context) {
 
@@ -57,17 +57,17 @@ func CreateSpec(c *gin.Context) {
 		return
 	}
 
-	var rating models.Phone
+	var rating entities.Phone
 	if err := db.Where("id = ?", input.PhoneID).First(&rating).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "PhoneID not found!"})
 		return
 	}
 
 	user, _ := c.Get("user")
-	users := user.(models.User)
+	users := user.(entities.User)
 
 	// Create Spec
-	spec := models.Spec{
+	spec := entities.Spec{
 		PhoneID:   input.PhoneID,
 		Processor: input.Processor,
 		Memory:    input.Memory,
@@ -90,10 +90,10 @@ func CreateSpec(c *gin.Context) {
 // @Tags Spec
 // @Produce json
 // @Param id path string true "Spec id"
-// @Success 200 {object} models.Spec
+// @Success 200 {object} entities.Spec
 // @Router /specs/{id} [get]
 func GetSpecById(c *gin.Context) { // Get model if exist
-	var spec models.Spec
+	var spec entities.Spec
 
 	db := c.MustGet("db").(*gorm.DB)
 	if err := db.Where("id = ?", c.Param("id")).First(&spec).Error; err != nil {
@@ -113,13 +113,13 @@ func GetSpecById(c *gin.Context) { // Get model if exist
 // @Produce json
 // @Param id path string true "Spec id"
 // @Param Body body specInput true "the body to update age spec category"
-// @Success 200 {object} models.Spec
+// @Success 200 {object} entities.Spec
 // @Router /specs/{id} [patch]
 func UpdateSpec(c *gin.Context) {
 
 	db := c.MustGet("db").(*gorm.DB)
 	// Get model if exist
-	var spec models.Spec
+	var spec entities.Spec
 	if err := db.Where("id = ?", c.Param("id")).First(&spec).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
@@ -131,13 +131,13 @@ func UpdateSpec(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	var rating models.Phone
+	var rating entities.Phone
 	if err := db.Where("id = ?", input.PhoneID).First(&rating).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "PhoneID not found!"})
 		return
 	}
 
-	var updatedInput models.Spec
+	var updatedInput entities.Spec
 	updatedInput.PhoneID = input.PhoneID
 	updatedInput.Processor = input.Processor
 	updatedInput.Memory = input.Memory
@@ -166,7 +166,7 @@ func UpdateSpec(c *gin.Context) {
 func DeleteSpec(c *gin.Context) {
 	// Get model if exist
 	db := c.MustGet("db").(*gorm.DB)
-	var spec models.Spec
+	var spec entities.Spec
 	if err := db.Where("id = ?", c.Param("id")).First(&spec).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return

@@ -1,11 +1,11 @@
 package routes
 
 import (
+	"kredit_plus/src/app/handlers"
+	"kredit_plus/src/middlewares"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
-
-	"kredit_plus/controllers"
-	"kredit_plus/middlewares"
 
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
@@ -19,68 +19,68 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		c.Set("db", db)
 	})
 
-	r.POST("/register-admin", controllers.RegisterAdmin)
-	r.POST("/register", controllers.Register)
-	r.POST("/login", controllers.Login)
+	r.POST("/register-admin", handlers.RegisterAdmin)
+	r.POST("/register", handlers.Register)
+	r.POST("/login", handlers.Login)
 
 	AccountMiddlewareroute := r.Group("/change-password")
 	AccountMiddlewareroute.Use(middlewares.PublicMiddleware())
-	AccountMiddlewareroute.PATCH("", controllers.UpdatePassword)
+	AccountMiddlewareroute.PATCH("", handlers.UpdatePassword)
 
-	r.GET("/phones", controllers.GetAllPhone)
-	r.GET("/phones/:id", controllers.GetPhoneById)
-	r.GET("/phones/:id/specs-comments", controllers.GetSpecCommentByPhoneId)
+	r.GET("/phones", handlers.GetAllPhone)
+	r.GET("/phones/:id", handlers.GetPhoneById)
+	r.GET("/phones/:id/specs-comments", handlers.GetSpecCommentByPhoneId)
 
 	phonesMiddlewareroute := r.Group("/phones")
 	phonesMiddlewareroute.Use(middlewares.AdminMiddleware())
-	phonesMiddlewareroute.POST("/", controllers.CreatePhone)
-	phonesMiddlewareroute.PATCH("/:id", controllers.UpdatePhone)
-	phonesMiddlewareroute.DELETE("/:id", controllers.DeletePhone)
+	phonesMiddlewareroute.POST("/", handlers.CreatePhone)
+	phonesMiddlewareroute.PATCH("/:id", handlers.UpdatePhone)
+	phonesMiddlewareroute.DELETE("/:id", handlers.DeletePhone)
 
-	r.GET("/brands", controllers.GetAllBrand)
-	r.GET("/brands/:id", controllers.GetBrandById)
-	r.GET("/brands/:id/phones", controllers.GetPhonesByBrandId)
+	r.GET("/brands", handlers.GetAllBrand)
+	r.GET("/brands/:id", handlers.GetBrandById)
+	r.GET("/brands/:id/phones", handlers.GetPhonesByBrandId)
 
 	merkMiddlewareroute := r.Group("/brands")
 	merkMiddlewareroute.Use(middlewares.AdminMiddleware())
-	merkMiddlewareroute.POST("/", controllers.CreateBrand)
-	merkMiddlewareroute.PATCH("/:id", controllers.UpdateBrand)
-	merkMiddlewareroute.DELETE("/:id", controllers.DeleteBrand)
+	merkMiddlewareroute.POST("/", handlers.CreateBrand)
+	merkMiddlewareroute.PATCH("/:id", handlers.UpdateBrand)
+	merkMiddlewareroute.DELETE("/:id", handlers.DeleteBrand)
 
-	r.GET("/specs", controllers.GetAllSpec)
-	r.GET("/specs/:id", controllers.GetSpecById)
+	r.GET("/specs", handlers.GetAllSpec)
+	r.GET("/specs/:id", handlers.GetSpecById)
 
 	specMiddlewareroute := r.Group("/specs")
 	specMiddlewareroute.Use(middlewares.AdminMiddleware())
-	specMiddlewareroute.POST("/", controllers.CreateSpec)
-	specMiddlewareroute.PATCH("/:id", controllers.UpdateSpec)
-	specMiddlewareroute.DELETE("/:id", controllers.DeleteSpec)
+	specMiddlewareroute.POST("/", handlers.CreateSpec)
+	specMiddlewareroute.PATCH("/:id", handlers.UpdateSpec)
+	specMiddlewareroute.DELETE("/:id", handlers.DeleteSpec)
 
-	r.GET("/news", controllers.GetAllNews)
-	r.GET("/news/:id", controllers.GetNewsById)
-	r.GET("/news/:id/comments", controllers.GetCommentByNewsId)
+	r.GET("/news", handlers.GetAllNews)
+	r.GET("/news/:id", handlers.GetNewsById)
+	r.GET("/news/:id/comments", handlers.GetCommentByNewsId)
 
 	newsMiddlewareroute := r.Group("/news")
 	newsMiddlewareroute.Use(middlewares.AdminMiddleware())
-	newsMiddlewareroute.POST("/", controllers.CreateNews)
-	newsMiddlewareroute.PATCH("/:id", controllers.UpdateNews)
-	newsMiddlewareroute.DELETE("/:id", controllers.DeleteNews)
+	newsMiddlewareroute.POST("/", handlers.CreateNews)
+	newsMiddlewareroute.PATCH("/:id", handlers.UpdateNews)
+	newsMiddlewareroute.DELETE("/:id", handlers.DeleteNews)
 
-	r.GET("/comments-phone", controllers.GetAllCommentPhone)
-	// r.GET("/comments-phone/:id", controllers.GetCommentPhoneById)
+	r.GET("/comments-phone", handlers.GetAllCommentPhone)
+	// r.GET("/comments-phone/:id", handlers.GetCommentPhoneById)
 
 	commentphoneMiddlewareroute := r.Group("/comments-phone")
 	commentphoneMiddlewareroute.Use(middlewares.PublicMiddleware())
-	commentphoneMiddlewareroute.POST("/", controllers.CreateCommentPhone)
-	commentphoneMiddlewareroute.DELETE("/:id", controllers.DeleteCommentPhone)
+	commentphoneMiddlewareroute.POST("/", handlers.CreateCommentPhone)
+	commentphoneMiddlewareroute.DELETE("/:id", handlers.DeleteCommentPhone)
 
-	r.GET("/comments-news", controllers.GetAllCommentNews)
-	// r.GET("/comments-news/:id", controllers.GetCommentNewsById)
+	r.GET("/comments-news", handlers.GetAllCommentNews)
+	// r.GET("/comments-news/:id", handlers.GetCommentNewsById)
 
 	commentnewsMiddlewareroute := r.Group("/comments-news")
 	commentnewsMiddlewareroute.Use(middlewares.PublicMiddleware())
-	commentnewsMiddlewareroute.POST("/", controllers.CreateCommentNews)
-	commentnewsMiddlewareroute.DELETE("/:id", controllers.DeleteCommentNews)
+	commentnewsMiddlewareroute.POST("/", handlers.CreateCommentNews)
+	commentnewsMiddlewareroute.DELETE("/:id", handlers.DeleteCommentNews)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 

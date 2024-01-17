@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"kredit_plus/src/models"
+	"kredit_plus/src/app/entities"
 	"kredit_plus/utils/token"
 	"log"
 	"net/http"
@@ -21,7 +21,7 @@ func PublicMiddleware() gin.HandlerFunc {
 		id, _ := token.ExtractTokenID(c)
 		db := c.MustGet("db").(*gorm.DB)
 
-		var user models.User
+		var user entities.User
 		result := db.First(&user, "id = ?", id)
 		if result.Error != nil {
 			log.Fatal(result.Error)
@@ -44,7 +44,7 @@ func AdminMiddleware() gin.HandlerFunc {
 		id, _ := token.ExtractTokenID(c)
 		db := c.MustGet("db").(*gorm.DB)
 
-		var user models.User
+		var user entities.User
 		result := db.First(&user, "id = ?", id)
 		if result.Error != nil {
 			log.Fatal(result.Error)

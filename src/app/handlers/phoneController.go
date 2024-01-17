@@ -1,7 +1,7 @@
-package controllers
+package handlers
 
 import (
-	"kredit_plus/src/models"
+	"kredit_plus/src/app/entities"
 	"net/http"
 	"time"
 
@@ -20,12 +20,12 @@ type phoneInput struct {
 // @Description Get a list of Phones.
 // @Tags Phone
 // @Produce json
-// @Success 200 {object} []models.Phone
+// @Success 200 {object} []entities.Phone
 // @Router /phones [get]
 func GetAllPhone(c *gin.Context) {
 	// get db from gin context
 	db := c.MustGet("db").(*gorm.DB)
-	var phones []models.Phone
+	var phones []entities.Phone
 	db.Find(&phones)
 
 	c.JSON(http.StatusOK, gin.H{"data": phones})
@@ -39,14 +39,14 @@ func GetAllPhone(c *gin.Context) {
 // @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
 // @Security BearerToken
 // @Produce json
-// @Success 200 {object} models.Phone
+// @Success 200 {object} entities.Phone
 // @Router /phones [post]
 func CreatePhone(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
 
 	// Validate input
 	var input phoneInput
-	var rating models.Brand
+	var rating entities.Brand
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -59,10 +59,10 @@ func CreatePhone(c *gin.Context) {
 
 	// Get user active info
 	user, _ := c.Get("user")
-	users := user.(models.User)
+	users := user.(entities.User)
 
 	// Create Phone
-	phone := models.Phone{UserID: users.ID, EditorName: users.Username, Type: input.Type, Year: input.Year, BrandID: input.BrandID}
+	phone := entities.Phone{UserID: users.ID, EditorName: users.Username, Type: input.Type, Year: input.Year, BrandID: input.BrandID}
 	db.Create(&phone)
 
 	c.JSON(http.StatusOK, gin.H{"data": phone})
@@ -74,10 +74,10 @@ func CreatePhone(c *gin.Context) {
 // @Tags Phone
 // @Produce json
 // @Param id path string true "phone id"
-// @Success 200 {object} models.Phone
+// @Success 200 {object} entities.Phone
 // @Router /phones/{id} [get]
 func GetPhoneById(c *gin.Context) { // Get model if exist
-	var phone models.Phone
+	var phone entities.Phone
 
 	db := c.MustGet("db").(*gorm.DB)
 	if err := db.Where("id = ?", c.Param("id")).First(&phone).Error; err != nil {
@@ -97,14 +97,14 @@ func GetPhoneById(c *gin.Context) { // Get model if exist
 // @Produce json
 // @Param id path string true "phone id"
 // @Param Body body phoneInput true "the body to update an phone"
-// @Success 200 {object} models.Phone
+// @Success 200 {object} entities.Phone
 // @Router /phones/{id} [patch]
 func UpdatePhone(c *gin.Context) {
 
 	db := c.MustGet("db").(*gorm.DB)
 	// Get model if exist
-	var phone models.Phone
-	var rating models.Brand
+	var phone entities.Phone
+	var rating entities.Brand
 	if err := db.Where("id = ?", c.Param("id")).First(&phone).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
@@ -124,9 +124,9 @@ func UpdatePhone(c *gin.Context) {
 
 	// Get user active info
 	user, _ := c.Get("user")
-	users := user.(models.User)
+	users := user.(entities.User)
 
-	var updatedInput models.Phone
+	var updatedInput entities.Phone
 	updatedInput.Type = input.Type
 	updatedInput.Year = input.Year
 	updatedInput.UserID = users.ID
@@ -151,7 +151,7 @@ func UpdatePhone(c *gin.Context) {
 func DeletePhone(c *gin.Context) {
 	// Get model if exist
 	db := c.MustGet("db").(*gorm.DB)
-	var phone models.Phone
+	var phone entities.Phone
 	if err := db.Where("id = ?", c.Param("id")).First(&phone).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
@@ -174,7 +174,7 @@ func DeletePhone(c *gin.Context) {
 // @Router /phones/{id}/specs-comments [get]
 func GetSpecCommentByPhoneId(c *gin.Context) { // Get model if exist
 
-	var spec []models.Spec
+	var spec []entities.Spec
 
 	db := c.MustGet("db").(*gorm.DB)
 
@@ -183,7 +183,7 @@ func GetSpecCommentByPhoneId(c *gin.Context) { // Get model if exist
 		return
 	}
 
-	var comments []models.CommentsPhone
+	var comments []entities.CommentsPhone
 
 	dbb := c.MustGet("db").(*gorm.DB)
 

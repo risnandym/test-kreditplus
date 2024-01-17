@@ -1,7 +1,7 @@
-package controllers
+package handlers
 
 import (
-	"kredit_plus/src/models"
+	"kredit_plus/src/app/entities"
 	"net/http"
 	"time"
 
@@ -20,12 +20,12 @@ type newsInput struct {
 // @Description Get a list of News.
 // @Tags News
 // @Produce json
-// @Success 200 {object} []models.News
+// @Success 200 {object} []entities.News
 // @Router /news [get]
 func GetAllNews(c *gin.Context) {
 	// get db from gin context
 	db := c.MustGet("db").(*gorm.DB)
-	var news []models.News
+	var news []entities.News
 	db.Find(&news)
 
 	c.JSON(http.StatusOK, gin.H{"data": news})
@@ -39,7 +39,7 @@ func GetAllNews(c *gin.Context) {
 // @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
 // @Security BearerToken
 // @Produce json
-// @Success 200 {object} models.News
+// @Success 200 {object} entities.News
 // @Router /news [post]
 func CreateNews(c *gin.Context) {
 	db := c.MustGet("db").(*gorm.DB)
@@ -53,10 +53,10 @@ func CreateNews(c *gin.Context) {
 
 	// Get user active info
 	user, _ := c.Get("user")
-	users := user.(models.User)
+	users := user.(entities.User)
 
 	// Create News
-	news := models.News{CreatorName: users.Username, UserID: users.ID, Title: input.Title, Content: input.Content, Link_URL: input.Link_URL}
+	news := entities.News{CreatorName: users.Username, UserID: users.ID, Title: input.Title, Content: input.Content, Link_URL: input.Link_URL}
 	db.Create(&news)
 
 	c.JSON(http.StatusOK, gin.H{"data": news})
@@ -68,10 +68,10 @@ func CreateNews(c *gin.Context) {
 // @Tags News
 // @Produce json
 // @Param id path string true "phone id"
-// @Success 200 {object} models.News
+// @Success 200 {object} entities.News
 // @Router /news/{id} [get]
 func GetNewsById(c *gin.Context) { // Get model if exist
-	var phone models.News
+	var phone entities.News
 
 	db := c.MustGet("db").(*gorm.DB)
 	if err := db.Where("id = ?", c.Param("id")).First(&phone).Error; err != nil {
@@ -91,13 +91,13 @@ func GetNewsById(c *gin.Context) { // Get model if exist
 // @Produce json
 // @Param id path string true "phone id"
 // @Param Body body newsInput true "the body to update an phone"
-// @Success 200 {object} models.News
+// @Success 200 {object} entities.News
 // @Router /news/{id} [patch]
 func UpdateNews(c *gin.Context) {
 
 	db := c.MustGet("db").(*gorm.DB)
 	// Get model if exist
-	var phone models.News
+	var phone entities.News
 	if err := db.Where("id = ?", c.Param("id")).First(&phone).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
@@ -112,9 +112,9 @@ func UpdateNews(c *gin.Context) {
 
 	// Get user active info
 	user, _ := c.Get("user")
-	users := user.(models.User)
+	users := user.(entities.User)
 
-	var updatedInput models.News
+	var updatedInput entities.News
 	updatedInput.CreatorName = users.Username
 	updatedInput.UserID = users.ID
 	updatedInput.Title = input.Title
@@ -140,7 +140,7 @@ func UpdateNews(c *gin.Context) {
 func DeleteNews(c *gin.Context) {
 	// Get model if exist
 	db := c.MustGet("db").(*gorm.DB)
-	var phone models.News
+	var phone entities.News
 	if err := db.Where("id = ?", c.Param("id")).First(&phone).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
@@ -164,7 +164,7 @@ func DeleteNews(c *gin.Context) {
 // @Success 200
 // @Router /news/{id}/comments [get]
 func GetCommentByNewsId(c *gin.Context) { // Get model if exist
-	var comments []models.CommentsNews
+	var comments []entities.CommentsNews
 
 	db := c.MustGet("db").(*gorm.DB)
 

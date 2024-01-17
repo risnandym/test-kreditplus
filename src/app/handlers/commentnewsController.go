@@ -1,7 +1,7 @@
-package controllers
+package handlers
 
 import (
-	"kredit_plus/src/models"
+	"kredit_plus/src/app/entities"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -18,12 +18,12 @@ type commentNewsInput struct {
 // @Description Get a list of Comment.
 // @Tags Comment News
 // @Produce json
-// @Success 200 {object} []models.CommentsNews
+// @Success 200 {object} []entities.CommentsNews
 // @Router /comments-news [get]
 func GetAllCommentNews(c *gin.Context) {
 	// get db from gin context
 	db := c.MustGet("db").(*gorm.DB)
-	var comments []models.CommentsNews
+	var comments []entities.CommentsNews
 	db.Find(&comments)
 
 	c.JSON(http.StatusOK, gin.H{"data": comments})
@@ -37,7 +37,7 @@ func GetAllCommentNews(c *gin.Context) {
 // @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
 // @Security BearerToken
 // @Produce json
-// @Success 200 {object} models.CommentsNews
+// @Success 200 {object} entities.CommentsNews
 // @Router /comments-news [post]
 func CreateCommentNews(c *gin.Context) {
 	// Validate input
@@ -48,17 +48,17 @@ func CreateCommentNews(c *gin.Context) {
 	}
 
 	db := c.MustGet("db").(*gorm.DB)
-	var rating models.News
+	var rating entities.News
 	if err := db.Where("id = ?", input.NewsID).First(&rating).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "NewsID not found!"})
 		return
 	}
 
 	user, _ := c.Get("user")
-	users := user.(models.User)
+	users := user.(entities.User)
 
 	// Create Comment
-	comment := models.CommentsNews{
+	comment := entities.CommentsNews{
 		NewsID:  input.NewsID,
 		Name:    users.Username,
 		Comment: input.Comment,
@@ -82,7 +82,7 @@ func CreateCommentNews(c *gin.Context) {
 func DeleteCommentNews(c *gin.Context) {
 	// Get model if exist
 	db := c.MustGet("db").(*gorm.DB)
-	var comment models.CommentsNews
+	var comment entities.CommentsNews
 	if err := db.Where("id = ?", c.Param("id")).First(&comment).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return

@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"kredit_plus/src/models"
+	"kredit_plus/src/app/entities"
 	"kredit_plus/utils"
 	"os"
 
@@ -27,7 +27,7 @@ func ConnectDataBase() *gorm.DB {
 			panic(err.Error())
 		}
 
-		db.AutoMigrate(&models.User{}, &models.Phone{}, &models.Brand{}, &models.Spec{}, &models.CommentsPhone{}, &models.News{}, &models.CommentsNews{})
+		db.AutoMigrate(&entities.User{}, &entities.Phone{}, &entities.Brand{}, &entities.Spec{}, &entities.CommentsPhone{}, &entities.News{}, &entities.CommentsNews{})
 
 		return db
 	} else {
@@ -44,7 +44,7 @@ func ConnectDataBase() *gorm.DB {
 			panic(err.Error())
 		}
 
-		db.AutoMigrate(&models.User{}, &models.Phone{}, &models.Brand{}, &models.Spec{}, &models.CommentsPhone{}, &models.News{}, &models.CommentsNews{})
+		db.AutoMigrate(&entities.User{}, &entities.Phone{}, &entities.Brand{}, &entities.Spec{}, &entities.CommentsPhone{}, &entities.News{}, &entities.CommentsNews{})
 
 		return db
 	}
