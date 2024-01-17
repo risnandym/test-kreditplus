@@ -1,0 +1,982 @@
+definitions:
+  controllers.ChangePasswordInput:
+    properties:
+      password:
+        type: string
+    required:
+    - password
+    type: object
+  controllers.LoginInput:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  controllers.RegisterInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  controllers.brandInput:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  controllers.commentNewsInput:
+    properties:
+      comment:
+        type: string
+      news_id:
+        type: integer
+    type: object
+  controllers.commentphoneInput:
+    properties:
+      comment:
+        type: string
+      phone_id:
+        type: integer
+    type: object
+  controllers.newsInput:
+    properties:
+      content:
+        type: string
+      link_url:
+        type: string
+      title:
+        type: string
+    type: object
+  controllers.phoneInput:
+    properties:
+      brand_id:
+        type: integer
+      type:
+        type: string
+      year:
+        type: integer
+    type: object
+  controllers.specInput:
+    properties:
+      camera:
+        type: string
+      memory:
+        type: string
+      phone_id:
+        type: integer
+      price:
+        type: string
+      processor:
+        type: string
+      review:
+        type: string
+      screen:
+        type: string
+      storage:
+        type: string
+    type: object
+  models.Brand:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.CommentsNews:
+    properties:
+      comment:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      news_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.CommentsPhone:
+    properties:
+      comment:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      phone_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  models.News:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      creator_name:
+        type: string
+      id:
+        type: integer
+      link_url:
+        type: string
+      title:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.Phone:
+    properties:
+      brand_id:
+        type: integer
+      created_at:
+        type: string
+      editor_name:
+        type: string
+      id:
+        type: integer
+      type:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+      year:
+        type: integer
+    type: object
+  models.Spec:
+    properties:
+      camera:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      memory:
+        type: string
+      phone_id:
+        type: integer
+      price:
+        type: string
+      processor:
+        type: string
+      review:
+        type: string
+      screen:
+        type: string
+      storage:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  models.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      full_access:
+        type: boolean
+      id:
+        type: integer
+      password:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+paths:
+  /brands:
+    get:
+      description: Get a list of Brand.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Brand'
+            type: array
+      summary: Get all Brand.
+      tags:
+      - Brand
+    post:
+      description: Creating a new Brand.
+      parameters:
+      - description: the body to create a new Brand
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.brandInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Brand'
+      security:
+      - BearerToken: []
+      summary: Create New Brand. (Admin only)
+      tags:
+      - Brand
+  /brands/{id}:
+    delete:
+      description: Delete a Brand by id.
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Brand id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - BearerToken: []
+      summary: Delete one Brand. (Admin only)
+      tags:
+      - Brand
+    get:
+      description: Get an Brand by Id.
+      parameters:
+      - description: Brand id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Brand'
+      summary: Get Brand by Id.
+      tags:
+      - Brand
+    patch:
+      description: Update Brand by id.
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Brand id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update age merk category
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.brandInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Brand'
+      security:
+      - BearerToken: []
+      summary: Update Brand. (Admin only)
+      tags:
+      - Brand
+  /brands/{id}/phones:
+    get:
+      description: Get all Phones by Brand Id.
+      parameters:
+      - description: Brand id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Phone'
+            type: array
+      summary: Get Phones by Brand Id.
+      tags:
+      - Brand
+  /change-password:
+    patch:
+      description: change password.
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: the body to update age merk category
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.ChangePasswordInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      security:
+      - BearerToken: []
+      summary: Change Password.
+      tags:
+      - Auth
+  /comments-news:
+    get:
+      description: Get a list of Comment.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CommentsNews'
+            type: array
+      summary: Get all Comment.
+      tags:
+      - Comment News
+    post:
+      description: Creating a new Comment.
+      parameters:
+      - description: the body to create a new Comment
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.commentNewsInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommentsNews'
+      security:
+      - BearerToken: []
+      summary: Create New Comment.
+      tags:
+      - Comment News
+  /comments-news/{id}:
+    delete:
+      description: Delete a Comment by id.
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Comment id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - BearerToken: []
+      summary: Delete one Comment.
+      tags:
+      - Comment News
+  /comments-phone:
+    get:
+      description: Get a list of Comment.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CommentsPhone'
+            type: array
+      summary: Get all Comment.
+      tags:
+      - Comment Phone
+    post:
+      description: Creating a new Comment.
+      parameters:
+      - description: the body to create a new Comment
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.commentphoneInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CommentsPhone'
+      security:
+      - BearerToken: []
+      summary: Create New Comment.
+      tags:
+      - Comment Phone
+  /comments-phone/{id}:
+    delete:
+      description: Delete a Comment by id.
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Comment id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - BearerToken: []
+      summary: Delete one Comment.
+      tags:
+      - Comment Phone
+  /login:
+    post:
+      description: Logging in to get jwt token to access admin or user api by roles.
+      parameters:
+      - description: the body to login a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login.
+      tags:
+      - Auth
+  /news:
+    get:
+      description: Get a list of News.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.News'
+            type: array
+      summary: Get all News.
+      tags:
+      - News
+    post:
+      description: Creating a new News.
+      parameters:
+      - description: the body to create a new phone
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.newsInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.News'
+      security:
+      - BearerToken: []
+      summary: Create New News. (Admin only)
+      tags:
+      - News
+  /news/{id}:
+    delete:
+      description: Delete a phone by id.
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: phone id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - BearerToken: []
+      summary: Delete one News. (Admin only)
+      tags:
+      - News
+    get:
+      description: Get a News by id.
+      parameters:
+      - description: phone id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.News'
+      summary: Get News by Id.
+      tags:
+      - News
+    patch:
+      description: Update phone by id.
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: phone id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update an phone
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.newsInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.News'
+      security:
+      - BearerToken: []
+      summary: Update News. (Admin only)
+      tags:
+      - News
+  /news/{id}/comments:
+    get:
+      description: Get all Specs and Comment by NewsId.
+      parameters:
+      - description: News id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get Comments by NewsId.
+      tags:
+      - News
+  /phones:
+    get:
+      description: Get a list of Phones.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Phone'
+            type: array
+      summary: Get all phones.
+      tags:
+      - Phone
+    post:
+      description: Creating a new Phone.
+      parameters:
+      - description: the body to create a new phone
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.phoneInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Phone'
+      security:
+      - BearerToken: []
+      summary: Create New Phone. (Admin only)
+      tags:
+      - Phone
+  /phones/{id}:
+    delete:
+      description: Delete a phone by id.
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: phone id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - BearerToken: []
+      summary: Delete one phone. (Admin only)
+      tags:
+      - Phone
+    get:
+      description: Get a Phone by id.
+      parameters:
+      - description: phone id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Phone'
+      summary: Get Phone.
+      tags:
+      - Phone
+    patch:
+      description: Update phone by id.
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: phone id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update an phone
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.phoneInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Phone'
+      security:
+      - BearerToken: []
+      summary: Update Phone. (Admin only)
+      tags:
+      - Phone
+  /phones/{id}/specs-comments:
+    get:
+      description: Get all Specs and Comment by PhoneId.
+      parameters:
+      - description: Phone id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Get Specs & CommentsPhone.
+      tags:
+      - Phone
+  /register:
+    post:
+      description: registering a user from public access.
+      parameters:
+      - description: the body to register a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.RegisterInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register a User.
+      tags:
+      - Auth
+  /register-admin:
+    post:
+      description: registering a user from full access.
+      parameters:
+      - description: the body to register a FULL ACCESS account (ADMIN)
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.RegisterInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register a Full Access account (ADMIN).
+      tags:
+      - Auth
+  /specs:
+    get:
+      description: Get a list of Spec.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Spec'
+            type: array
+      summary: Get all Spec.
+      tags:
+      - Spec
+    post:
+      description: Creating a new Spec.
+      parameters:
+      - description: the body to create a new Spec
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.specInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Spec'
+      security:
+      - BearerToken: []
+      summary: Create New Spec. (Admin only)
+      tags:
+      - Spec
+  /specs/{id}:
+    delete:
+      description: Delete a Spec by id.
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Spec id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: boolean
+            type: object
+      security:
+      - BearerToken: []
+      summary: Delete one Spec. (Admin only)
+      tags:
+      - Spec
+    get:
+      description: Get an Spec by id.
+      parameters:
+      - description: Spec id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Spec'
+      summary: Get Spec.
+      tags:
+      - Spec
+    patch:
+      description: Update Spec by id.
+      parameters:
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Spec id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: the body to update age spec category
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.specInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Spec'
+      security:
+      - BearerToken: []
+      summary: Update Spec. (Admin only)
+      tags:
+      - Spec
+swagger: "2.0"
