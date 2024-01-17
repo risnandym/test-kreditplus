@@ -1,11 +1,10 @@
 package middlewares
 
 import (
+	"kredit_plus/src/models"
+	"kredit_plus/utils/token"
 	"log"
 	"net/http"
-
-	"final-project/models"
-	"final-project/utils/token"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

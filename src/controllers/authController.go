@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"errors"
-	"final-project/models"
 	"fmt"
+	"kredit_plus/src/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

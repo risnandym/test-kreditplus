@@ -1,10 +1,10 @@
 package main
 
 import (
-	"final-project/config"
-	"final-project/docs"
-	"final-project/routes"
-	"final-project/utils"
+	"kredit_plus/config"
+	"kredit_plus/docs"
+	"kredit_plus/routes"
+	"kredit_plus/utils"
 	"log"
 
 	"github.com/joho/godotenv"

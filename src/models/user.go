@@ -1,8 +1,8 @@
 package models
 
 import (
-	"final-project/utils/token"
 	"html"
+	"kredit_plus/utils/token"
 	"strings"
 	"time"
 

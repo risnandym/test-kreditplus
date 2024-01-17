@@ -1,14 +1,13 @@
 package config
 
 import (
-	"final-project/models"
-	"final-project/utils"
 	"fmt"
+	"kredit_plus/src/models"
+	"kredit_plus/utils"
 	"os"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
-
 	"gorm.io/gorm"
 )
 

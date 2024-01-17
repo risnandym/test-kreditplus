@@ -1,9 +1,8 @@
 package controllers
 
 import (
+	"kredit_plus/src/models"
 	"net/http"
-
-	"final-project/models"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"

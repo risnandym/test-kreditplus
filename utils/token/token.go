@@ -1,8 +1,8 @@
 package token
 
 import (
-	"final-project/utils"
 	"fmt"
+	"kredit_plus/utils"
 	"strconv"
 	"strings"
 	"time"
