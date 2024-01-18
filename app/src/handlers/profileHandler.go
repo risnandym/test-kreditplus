@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"kredit_plus/app/src/contract"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -36,20 +35,18 @@ import (
 // @Router /comments-news [post]
 func CreateProfile(svc ProfileService) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		log.Println("sudah masuk handler")
+
 		request, err := contract.ValidateAndBuildProfileInput(c)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		log.Println("sudah lewat validate")
 
 		response, err := svc.Create(request)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
-		log.Println("sudah lewat service")
 
 		c.JSON(http.StatusOK, gin.H{"data": response})
 	}
