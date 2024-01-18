@@ -1,6 +1,8 @@
 package config
 
 import (
+	"kredit_plus/docs"
+
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 )
@@ -21,10 +23,18 @@ func Init() error {
 	if err != nil {
 		return err
 	}
+
 	db, err := ConnectDataBase(cfg.Postgres)
 	if err != nil {
 		return err
 	}
+
+	// programmatically set swagger info
+	docs.SwaggerInfo.Title = "Review Mobile Phone API"
+	docs.SwaggerInfo.Description = "This is a Final Project Golang JCC."
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = cfg.Swagger.SwaggerHost
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	// _, err = tracer.Init(ctx, cfg.ServiceName, "0.0.1")
 	// if err != nil {

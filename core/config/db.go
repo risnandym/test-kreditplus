@@ -1,15 +1,12 @@
 package config
 
 import (
-	"kredit_plus/src/app/entities"
-	"log"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func ConnectDataBase(conn Postgres) (*gorm.DB, error) {
-	log.Println("berhasil masuk connectdb")
+
 	username := conn.UserName
 	password := conn.Password
 	host := conn.Host
@@ -22,7 +19,7 @@ func ConnectDataBase(conn Postgres) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	db.AutoMigrate(&entities.User{})
+	// db.AutoMigrate(&entities.Auth{})
 
 	return db, err
 }

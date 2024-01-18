@@ -1,61 +1,36 @@
 package middlewares
 
 import (
-	"kredit_plus/core/utils/token"
-	"kredit_plus/src/app/entities"
+	"kredit_plus/app/src/handlers"
+	"kredit_plus/core/config"
+	"kredit_plus/core/utils"
 	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
-func PublicMiddleware() gin.HandlerFunc {
+func PublicMiddleware(svc handlers.AuthService) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		err := token.TokenValid(c)
+		log.Println("sudah masuk handler mdlwr")
+
+		err := utils.TokenValid(c, config.Config())
 		if err != nil {
 			c.String(http.StatusUnauthorized, err.Error())
 			c.Abort()
 			return
 		}
-		id, _ := token.ExtractTokenID(c)
-		db := c.MustGet("app").(*gorm.DB)
+		log.Println("sudah lewat token valid")
 
-		var user entities.User
-		result := db.First(&user, "id = ?", id)
-		if result.Error != nil {
-			log.Fatal(result.Error)
-		}
+		id, _ := utils.ExtractTokenID(c, config.Config())
+		log.Println("sudah lewat token extract")
 
-		c.Set("user", user)
-
-		c.Next()
-	}
-}
-
-func AdminMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		err := token.TokenValid(c)
+		auth, err := svc.Get(id)
 		if err != nil {
-			c.String(http.StatusUnauthorized, err.Error())
-			c.Abort()
-			return
-		}
-		id, _ := token.ExtractTokenID(c)
-		db := c.MustGet("app").(*gorm.DB)
-
-		var user entities.User
-		result := db.First(&user, "id = ?", id)
-		if result.Error != nil {
-			log.Fatal(result.Error)
+			log.Fatal(err)
 		}
 
-		// // Validate access
-		// if user.FullAccess == false {
-		// 	c.JSON(http.StatusBadRequest, gin.H{"error": "you dont have an access!"})
-		// 	return
-		// }
-		c.Set("user", user)
+		c.Set("auth", auth)
 
 		c.Next()
 	}

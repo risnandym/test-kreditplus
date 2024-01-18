@@ -22,13 +22,19 @@ type (
 		Database string `mapstructure:"PG_DATABASE" validate:"required"`
 	}
 
+	Swagger struct {
+		SwaggerHost string `mapstructure:"SWAGGER_HOST" validate:"required"`
+	}
+
 	Configuration struct {
+		Environment   string `mapstructure:"ENV" validate:"required,oneof=development staging production"`
+		BindAddress   int    `mapstructure:"BIND_ADDRESS" validate:"required"`
+		TokenLifeSpan int    `mapstructure:"TOKEN_HOUR_LIFESPAN" validate:"required"`
+		APISecret     string `mapstructure:"API_SECRET" validate:"required"`
+
 		ServiceName string   `mapstructure:"SERVICE_NAME"`
 		Postgres    Postgres `mapstructure:",squash"`
-
-		Environment string `mapstructure:"ENV" validate:"required,oneof=development staging production"`
-		BindAddress int    `mapstructure:"BIND_ADDRESS" validate:"required"`
-		// LogLevel    int    `mapstructure:"LOG_LEVEL" validate:"required"`
+		Swagger     Swagger  `mapstructure:",squash"`
 	}
 )
 
