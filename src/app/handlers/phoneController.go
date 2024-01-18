@@ -24,7 +24,7 @@ type phoneInput struct {
 // @Router /phones [get]
 func GetAllPhone(c *gin.Context) {
 	// get db from gin context
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var phones []entities.Phone
 	db.Find(&phones)
 
@@ -42,7 +42,7 @@ func GetAllPhone(c *gin.Context) {
 // @Success 200 {object} entities.Phone
 // @Router /phones [post]
 func CreatePhone(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 
 	// Validate input
 	var input phoneInput
@@ -62,7 +62,7 @@ func CreatePhone(c *gin.Context) {
 	users := user.(entities.User)
 
 	// Create Phone
-	phone := entities.Phone{UserID: users.ID, EditorName: users.Username, Type: input.Type, Year: input.Year, BrandID: input.BrandID}
+	phone := entities.Phone{UserID: users.ID, EditorName: users.Email, Type: input.Type, Year: input.Year, BrandID: input.BrandID}
 	db.Create(&phone)
 
 	c.JSON(http.StatusOK, gin.H{"data": phone})
@@ -79,7 +79,7 @@ func CreatePhone(c *gin.Context) {
 func GetPhoneById(c *gin.Context) { // Get model if exist
 	var phone entities.Phone
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	if err := db.Where("id = ?", c.Param("id")).First(&phone).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
@@ -101,7 +101,7 @@ func GetPhoneById(c *gin.Context) { // Get model if exist
 // @Router /phones/{id} [patch]
 func UpdatePhone(c *gin.Context) {
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	// Get model if exist
 	var phone entities.Phone
 	var rating entities.Brand
@@ -150,7 +150,7 @@ func UpdatePhone(c *gin.Context) {
 // @Router /phones/{id} [delete]
 func DeletePhone(c *gin.Context) {
 	// Get model if exist
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var phone entities.Phone
 	if err := db.Where("id = ?", c.Param("id")).First(&phone).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
@@ -176,7 +176,7 @@ func GetSpecCommentByPhoneId(c *gin.Context) { // Get model if exist
 
 	var spec []entities.Spec
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 
 	if err := db.Where("phone_id = ?", c.Param("id")).Find(&spec).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
@@ -185,7 +185,7 @@ func GetSpecCommentByPhoneId(c *gin.Context) { // Get model if exist
 
 	var comments []entities.CommentsPhone
 
-	dbb := c.MustGet("db").(*gorm.DB)
+	dbb := c.MustGet("app").(*gorm.DB)
 
 	if err := dbb.Where("phone_id = ?", c.Param("id")).Find(&comments).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})

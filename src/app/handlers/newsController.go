@@ -24,7 +24,7 @@ type newsInput struct {
 // @Router /news [get]
 func GetAllNews(c *gin.Context) {
 	// get db from gin context
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var news []entities.News
 	db.Find(&news)
 
@@ -42,7 +42,7 @@ func GetAllNews(c *gin.Context) {
 // @Success 200 {object} entities.News
 // @Router /news [post]
 func CreateNews(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 
 	// Validate input
 	var input newsInput
@@ -56,7 +56,7 @@ func CreateNews(c *gin.Context) {
 	users := user.(entities.User)
 
 	// Create News
-	news := entities.News{CreatorName: users.Username, UserID: users.ID, Title: input.Title, Content: input.Content, Link_URL: input.Link_URL}
+	news := entities.News{CreatorName: users.Email, UserID: users.ID, Title: input.Title, Content: input.Content, Link_URL: input.Link_URL}
 	db.Create(&news)
 
 	c.JSON(http.StatusOK, gin.H{"data": news})
@@ -73,7 +73,7 @@ func CreateNews(c *gin.Context) {
 func GetNewsById(c *gin.Context) { // Get model if exist
 	var phone entities.News
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	if err := db.Where("id = ?", c.Param("id")).First(&phone).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
@@ -95,7 +95,7 @@ func GetNewsById(c *gin.Context) { // Get model if exist
 // @Router /news/{id} [patch]
 func UpdateNews(c *gin.Context) {
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	// Get model if exist
 	var phone entities.News
 	if err := db.Where("id = ?", c.Param("id")).First(&phone).Error; err != nil {
@@ -115,7 +115,7 @@ func UpdateNews(c *gin.Context) {
 	users := user.(entities.User)
 
 	var updatedInput entities.News
-	updatedInput.CreatorName = users.Username
+	updatedInput.CreatorName = users.Email
 	updatedInput.UserID = users.ID
 	updatedInput.Title = input.Title
 	updatedInput.Content = input.Content
@@ -139,7 +139,7 @@ func UpdateNews(c *gin.Context) {
 // @Router /news/{id} [delete]
 func DeleteNews(c *gin.Context) {
 	// Get model if exist
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var phone entities.News
 	if err := db.Where("id = ?", c.Param("id")).First(&phone).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
@@ -166,7 +166,7 @@ func DeleteNews(c *gin.Context) {
 func GetCommentByNewsId(c *gin.Context) { // Get model if exist
 	var comments []entities.CommentsNews
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 
 	if err := db.Where("news_id = ?", c.Param("id")).Find(&comments).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})

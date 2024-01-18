@@ -2,18 +2,19 @@ package token
 
 import (
 	"fmt"
-	"kredit_plus/utils"
+	"kredit_plus/core/utils"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/google/uuid"
 )
 
 var API_SECRET = utils.Getenv("API_SECRET", "rahasiasekali")
 
-func GenerateToken(user_id uint, full_access bool) (string, error) {
+func GenerateToken(user_id uint, uuid uuid.UUID) (string, error) {
 	token_lifespan, err := strconv.Atoi(utils.Getenv("TOKEN_HOUR_LIFESPAN", "1"))
 
 	if err != nil {
@@ -23,7 +24,7 @@ func GenerateToken(user_id uint, full_access bool) (string, error) {
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["user_id"] = user_id
-	claims["full_access"] = full_access
+	claims["uuid"] = uuid
 	claims["exp"] = time.Now().Add(time.Hour * time.Duration(token_lifespan)).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 

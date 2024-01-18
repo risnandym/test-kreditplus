@@ -1,31 +1,38 @@
 package routes
 
 import (
+	"kredit_plus/core/middlewares"
+	"kredit_plus/src"
 	"kredit_plus/src/app/handlers"
-	"kredit_plus/src/middlewares"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 
 	swaggerFiles "github.com/swaggo/files"     // swagger embed files
 	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
-func SetupRouter(db *gorm.DB) *gin.Engine {
+func SetupRouter(app *src.Dependency) *gin.Engine {
 	r := gin.Default()
 
 	// set db to gin context
 	r.Use(func(c *gin.Context) {
-		c.Set("db", db)
+		c.Set("app", app)
 	})
 
-	r.POST("/register-admin", handlers.RegisterAdmin)
-	r.POST("/register", handlers.Register)
-	r.POST("/login", handlers.Login)
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status": "ok",
+		})
+	})
+
+	// r.POST("/register-admin", handlers.RegisterAdmin)
+	r.POST("/register", handlers.Register(app.Services.UserSVC))
+	// r.POST("/login", handlers.Login)
 
 	AccountMiddlewareroute := r.Group("/change-password")
 	AccountMiddlewareroute.Use(middlewares.PublicMiddleware())
-	AccountMiddlewareroute.PATCH("", handlers.UpdatePassword)
+	// AccountMiddlewareroute.PATCH("", handlers.UpdatePassword)
 
 	r.GET("/phones", handlers.GetAllPhone)
 	r.GET("/phones/:id", handlers.GetPhoneById)

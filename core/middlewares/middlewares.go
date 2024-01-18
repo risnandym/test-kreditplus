@@ -1,8 +1,8 @@
 package middlewares
 
 import (
+	"kredit_plus/core/utils/token"
 	"kredit_plus/src/app/entities"
-	"kredit_plus/utils/token"
 	"log"
 	"net/http"
 
@@ -19,7 +19,7 @@ func PublicMiddleware() gin.HandlerFunc {
 			return
 		}
 		id, _ := token.ExtractTokenID(c)
-		db := c.MustGet("db").(*gorm.DB)
+		db := c.MustGet("app").(*gorm.DB)
 
 		var user entities.User
 		result := db.First(&user, "id = ?", id)
@@ -42,7 +42,7 @@ func AdminMiddleware() gin.HandlerFunc {
 			return
 		}
 		id, _ := token.ExtractTokenID(c)
-		db := c.MustGet("db").(*gorm.DB)
+		db := c.MustGet("app").(*gorm.DB)
 
 		var user entities.User
 		result := db.First(&user, "id = ?", id)
@@ -50,11 +50,11 @@ func AdminMiddleware() gin.HandlerFunc {
 			log.Fatal(result.Error)
 		}
 
-		// Validate access
-		if user.FullAccess == false {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "you dont have an access!"})
-			return
-		}
+		// // Validate access
+		// if user.FullAccess == false {
+		// 	c.JSON(http.StatusBadRequest, gin.H{"error": "you dont have an access!"})
+		// 	return
+		// }
 		c.Set("user", user)
 
 		c.Next()

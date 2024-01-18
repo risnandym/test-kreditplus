@@ -1,10 +1,11 @@
 package main
 
 import (
-	"kredit_plus/config"
+	"kredit_plus/core/config"
+	"kredit_plus/core/utils"
 	"kredit_plus/docs"
+	"kredit_plus/src"
 	"kredit_plus/src/routes"
-	"kredit_plus/utils"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -38,13 +39,20 @@ func main() {
 	docs.SwaggerInfo.Host = utils.Getenv("SWAGGER_HOST", "localhost:8080")
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
-	// database connection
-	db := config.ConnectDataBase()
-	sqlDB, _ := db.DB()
-	defer sqlDB.Close()
+	err := config.Init()
+	if err != nil {
+		panic(err)
+	}
+
+	// // database connection
+	// db,_ := config.ConnectDataBase(config.Postgres())
+	// sqlDB, _ := db.DB()
+	// defer sqlDB.Close()
+
+	app := src.Dependencies()
 
 	// router
-	r := routes.SetupRouter(db)
+	r := routes.SetupRouter(app)
 	// just remove port 8080
 	r.Run()
 }

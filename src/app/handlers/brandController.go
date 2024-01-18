@@ -23,7 +23,7 @@ type brandInput struct {
 // @Router /brands [get]
 func GetAllBrand(c *gin.Context) {
 	// get db from gin context
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var merks []entities.Brand
 	db.Find(&merks)
 
@@ -54,7 +54,7 @@ func CreateBrand(c *gin.Context) {
 
 	// Create Brand
 	merk := entities.Brand{UserID: users.ID, Name: input.Name, Description: input.Description}
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	db.Create(&merk)
 
 	c.JSON(http.StatusOK, gin.H{"data": merk})
@@ -71,7 +71,7 @@ func CreateBrand(c *gin.Context) {
 func GetBrandById(c *gin.Context) { // Get model if exist
 	var merk entities.Brand
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	if err := db.Where("id = ?", c.Param("id")).First(&merk).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
@@ -91,7 +91,7 @@ func GetBrandById(c *gin.Context) { // Get model if exist
 func GetPhonesByBrandId(c *gin.Context) { // Get model if exist
 	var phones []entities.Phone
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 
 	if err := db.Where("brand_id = ?", c.Param("id")).Find(&phones).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
@@ -114,7 +114,7 @@ func GetPhonesByBrandId(c *gin.Context) { // Get model if exist
 // @Router /brands/{id} [patch]
 func UpdateBrand(c *gin.Context) {
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	// Get model if exist
 	var merk entities.Brand
 	if err := db.Where("id = ?", c.Param("id")).First(&merk).Error; err != nil {
@@ -156,7 +156,7 @@ func UpdateBrand(c *gin.Context) {
 // @Router /brands/{id} [delete]
 func DeleteBrand(c *gin.Context) {
 	// Get model if exist
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var merk entities.Brand
 	if err := db.Where("id = ?", c.Param("id")).First(&merk).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})

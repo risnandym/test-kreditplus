@@ -1,27 +1,24 @@
 package entities
 
 import (
-	"html"
-	"kredit_plus/utils/token"
-	"strings"
+	"kredit_plus/core/utils/token"
+	"log"
 	"time"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
-type (
-	// User
-	User struct {
-		ID         uint      `json:"id" gorm:"primary_key"`
-		Username   string    `gorm:"not null;unique" json:"username"`
-		Email      string    `gorm:"not null;unique" json:"email"`
-		Password   string    `gorm:"not null;" json:"password"`
-		FullAccess bool      `gorm:"not null;default:false" json:"full_access"`
-		CreatedAt  time.Time `json:"created_at"`
-		UpdatedAt  time.Time `json:"updated_at"`
-	}
-)
+type User struct {
+	ID        uint      `gorm:"primary_key" json:"id"`
+	UUID      uuid.UUID `gorm:"not null;unique" json:"uuid"`
+	Email     string    `gorm:"not null;unique" json:"email"`
+	Phone     string    `gorm:"not null;" json:"phone"`
+	Password  string    `gorm:"not null;" json:"password"`
+	LastLogin time.Time `gorm:"not null;" json:"last_login"`
+	TimeStamp
+}
 
 func VerifyPassword(password, hashedPassword string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
@@ -45,7 +42,7 @@ func LoginCheck(username string, password string, db *gorm.DB) (string, error) {
 		return "", err
 	}
 
-	token, err := token.GenerateToken(u.ID, u.FullAccess)
+	token, err := token.GenerateToken(u.ID, u.UUID)
 
 	if err != nil {
 		return "", err
@@ -63,10 +60,11 @@ func (u *User) SaveUser(db *gorm.DB) (*User, error) {
 	}
 	u.Password = string(hashedPassword)
 	//remove spaces in username
-	u.Username = html.EscapeString(strings.TrimSpace(u.Username))
+	log.Println(u)
 
 	var err error = db.Create(&u).Error
 	if err != nil {
+
 		return &User{}, err
 	}
 	return u, nil

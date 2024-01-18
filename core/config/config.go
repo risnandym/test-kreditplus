@@ -1,0 +1,73 @@
+package config
+
+import (
+	"os"
+
+	"github.com/go-playground/validator/v10"
+	"github.com/spf13/viper"
+)
+
+/*
+	All config should be required.
+	Optional only allowed if zero value of the type is expected being the default value.
+	time.Duration units are “ns”, “us” (or “µs”), “ms”, “s”, “m”, “h”. as in time.ParseDuration().
+*/
+
+type (
+	Postgres struct {
+		UserName string `mapstructure:"PG_USER_NAME" validate:"required"`
+		Password string `mapstructure:"PG_PASSWORD" validate:"required"`
+		Host     string `mapstructure:"PG_HOST" validate:"required"`
+		Port     string `mapstructure:"PG_PORT" validate:"required"`
+		Database string `mapstructure:"PG_DATABASE" validate:"required"`
+	}
+
+	Configuration struct {
+		ServiceName string   `mapstructure:"SERVICE_NAME"`
+		Postgres    Postgres `mapstructure:",squash"`
+
+		Environment string `mapstructure:"ENV" validate:"required,oneof=development staging production"`
+		BindAddress int    `mapstructure:"BIND_ADDRESS" validate:"required"`
+		// LogLevel    int    `mapstructure:"LOG_LEVEL" validate:"required"`
+	}
+)
+
+func InitConfig() (*Configuration, error) {
+	var cfg Configuration
+
+	viper.SetConfigType("env")
+	envFile := os.Getenv("ENV_FILE")
+	if envFile == "" {
+		envFile = ".env"
+	}
+
+	_, err := os.Stat(envFile)
+	if !os.IsNotExist(err) {
+		viper.SetConfigFile(envFile)
+
+		if err := viper.ReadInConfig(); err != nil {
+			// logger.GetLogger(ctx).Errorf("failed to read config:%v", err)
+			return nil, err
+		}
+	}
+
+	viper.AutomaticEnv()
+
+	if err := viper.Unmarshal(&cfg); err != nil {
+		// logger.GetLogger(ctx).Errorf("failed to bind config:%v", err)
+		return nil, err
+	}
+
+	validate := validator.New()
+	if err := validate.Struct(cfg); err != nil {
+		// for _, _ := range err.(validator.ValidationErrors) {
+		// logger.GetLogger(ctx).Errorf("invalid config:%v", err)
+		// }
+		// logger.GetLogger(ctx).Errorf("failed to load config")
+
+		return nil, err
+	}
+
+	// logger.GetLogger(ctx).Infof("Config loaded: %+v", cfg)
+	return &cfg, nil
+}

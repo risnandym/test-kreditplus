@@ -22,7 +22,7 @@ type commentNewsInput struct {
 // @Router /comments-news [get]
 func GetAllCommentNews(c *gin.Context) {
 	// get db from gin context
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var comments []entities.CommentsNews
 	db.Find(&comments)
 
@@ -47,7 +47,7 @@ func CreateCommentNews(c *gin.Context) {
 		return
 	}
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var rating entities.News
 	if err := db.Where("id = ?", input.NewsID).First(&rating).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "NewsID not found!"})
@@ -60,7 +60,7 @@ func CreateCommentNews(c *gin.Context) {
 	// Create Comment
 	comment := entities.CommentsNews{
 		NewsID:  input.NewsID,
-		Name:    users.Username,
+		Email:   users.Email,
 		Comment: input.Comment,
 		UserID:  users.ID,
 	}
@@ -81,7 +81,7 @@ func CreateCommentNews(c *gin.Context) {
 // @Router /comments-news/{id} [delete]
 func DeleteCommentNews(c *gin.Context) {
 	// Get model if exist
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var comment entities.CommentsNews
 	if err := db.Where("id = ?", c.Param("id")).First(&comment).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})

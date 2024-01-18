@@ -29,7 +29,7 @@ type specInput struct {
 // @Router /specs [get]
 func GetAllSpec(c *gin.Context) {
 	// get db from gin context
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var specs []entities.Spec
 	db.Find(&specs)
 
@@ -48,7 +48,7 @@ func GetAllSpec(c *gin.Context) {
 // @Router /specs [post]
 func CreateSpec(c *gin.Context) {
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 
 	// Validate input
 	var input specInput
@@ -95,7 +95,7 @@ func CreateSpec(c *gin.Context) {
 func GetSpecById(c *gin.Context) { // Get model if exist
 	var spec entities.Spec
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	if err := db.Where("id = ?", c.Param("id")).First(&spec).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
@@ -117,7 +117,7 @@ func GetSpecById(c *gin.Context) { // Get model if exist
 // @Router /specs/{id} [patch]
 func UpdateSpec(c *gin.Context) {
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	// Get model if exist
 	var spec entities.Spec
 	if err := db.Where("id = ?", c.Param("id")).First(&spec).Error; err != nil {
@@ -165,7 +165,7 @@ func UpdateSpec(c *gin.Context) {
 // @Router /specs/{id} [delete]
 func DeleteSpec(c *gin.Context) {
 	// Get model if exist
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var spec entities.Spec
 	if err := db.Where("id = ?", c.Param("id")).First(&spec).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})

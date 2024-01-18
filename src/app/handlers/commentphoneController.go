@@ -22,7 +22,7 @@ type commentphoneInput struct {
 // @Router /comments-phone [get]
 func GetAllCommentPhone(c *gin.Context) {
 	// get db from gin context
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var comments []entities.CommentsPhone
 	db.Find(&comments)
 
@@ -47,7 +47,7 @@ func CreateCommentPhone(c *gin.Context) {
 		return
 	}
 
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var rating entities.Phone
 	if err := db.Where("id = ?", input.PhoneID).First(&rating).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "PhoneID not found!"})
@@ -59,7 +59,7 @@ func CreateCommentPhone(c *gin.Context) {
 	// Create Comment
 	comment := entities.CommentsPhone{
 		PhoneID: input.PhoneID,
-		Name:    users.Username,
+		Name:    users.Email,
 		Comment: input.Comment,
 		UserID:  users.ID,
 	}
@@ -81,7 +81,7 @@ func CreateCommentPhone(c *gin.Context) {
 // @Router /comments-phone/{id} [delete]
 func DeleteCommentPhone(c *gin.Context) {
 	// Get model if exist
-	db := c.MustGet("db").(*gorm.DB)
+	db := c.MustGet("app").(*gorm.DB)
 	var comment entities.CommentsPhone
 	if err := db.Where("id = ?", c.Param("id")).First(&comment).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
