@@ -3,7 +3,6 @@ package handlers
 import (
 	"fmt"
 	"kredit_plus/app/src/contract"
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -57,7 +56,7 @@ func Login(svc AuthService) gin.HandlerFunc {
 // @Router /register [post]
 func Register(svc AuthService) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		log.Println("berhasil masuk handler")
+
 		request, err := contract.ValidateAndBuildUserRegister(c)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
