@@ -29,6 +29,15 @@ definitions:
         type: number
       selfie_image:
         type: string
+    required:
+    - date_of_birth
+    - full_name
+    - ktp_image
+    - legal_name
+    - nik
+    - place_of_birth
+    - salary
+    - selfie_image
     type: object
   contract.RegisterInput:
     properties:
@@ -48,10 +57,13 @@ info:
     email: support@swagger.io
     name: API Support
     url: http://www.swagger.io/support
+  description: This is a Kredit+ test.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
+  title: Kredit+
+  version: "1.0"
 paths:
   /kredit-plus/customer/login:
     post:

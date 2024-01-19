@@ -150,6 +150,16 @@ const docTemplate = `{
         },
         "contract.ProfileInput": {
             "type": "object",
+            "required": [
+                "date_of_birth",
+                "full_name",
+                "ktp_image",
+                "legal_name",
+                "nik",
+                "place_of_birth",
+                "salary",
+                "selfie_image"
+            ],
             "properties": {
                 "auth_id": {
                     "type": "integer"
@@ -204,12 +214,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
+	Version:          "1.0",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Kredit+",
+	Description:      "This is a Kredit+ test.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

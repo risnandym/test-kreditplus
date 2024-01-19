@@ -29,10 +29,6 @@ func Init() error {
 		return err
 	}
 
-	// programmatically set swagger info
-	swagger.SwaggerInfo.Title = "Review Mobile Phone API"
-	swagger.SwaggerInfo.Description = "This is a Final Project Golang JCC."
-	swagger.SwaggerInfo.Version = "1.0"
 	swagger.SwaggerInfo.Host = cfg.Swagger.SwaggerHost
 	swagger.SwaggerInfo.Schemes = []string{"http", "https"}
 

@@ -1,6 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
+        "description": "This is a Kredit+ test.",
+        "title": "Kredit+",
         "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "API Support",
@@ -10,7 +12,8 @@
         "license": {
             "name": "Apache 2.0",
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        }
+        },
+        "version": "1.0"
     },
     "paths": {
         "/kredit-plus/customer/login": {
@@ -139,6 +142,16 @@
         },
         "contract.ProfileInput": {
             "type": "object",
+            "required": [
+                "date_of_birth",
+                "full_name",
+                "ktp_image",
+                "legal_name",
+                "nik",
+                "place_of_birth",
+                "salary",
+                "selfie_image"
+            ],
             "properties": {
                 "auth_id": {
                     "type": "integer"
