@@ -27,25 +27,3 @@ func (p ProfileRepository) Create(request entities.Profile) (response *entities.
 
 	return
 }
-
-// func (p ProfileRepository) Login(username string, password string) (token string, err error) {
-
-// 	user := entities.Profile{}
-
-// 	err = p.db.Model(entities.Profile{}).Where("email = ?", username).Take(&user).Error
-// 	if err != nil {
-// 		return "", err
-// 	}
-
-// 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-// 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
-// 		return "", err
-// 	}
-
-// 	token, err = utils.GenerateToken(p.config, user.ID, user.UUID)
-// 	if err != nil {
-// 		return "", err
-// 	}
-
-// 	return token, nil
-// }

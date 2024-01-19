@@ -2,7 +2,7 @@ package main
 
 import (
 	"test-kreditplus/core/config"
-	app "test-kreditplus/src"
+	"test-kreditplus/src"
 )
 
 //	@title			Kredit+
@@ -22,8 +22,8 @@ func main() {
 		panic(err)
 	}
 
-	dep := app.Dependencies()
+	dep := src.Dependencies()
 
-	r := app.SetupRouter(dep)
+	r := src.SetupRouter(dep)
 	r.Run()
 }

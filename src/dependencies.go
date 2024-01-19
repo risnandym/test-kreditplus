@@ -1,9 +1,10 @@
-package app
+package src
 
 import (
 	"log"
 	"test-kreditplus/core/config"
 	auth_repo "test-kreditplus/src/app/repositories/auth"
+	limit_repo "test-kreditplus/src/app/repositories/limit"
 	profile_repo "test-kreditplus/src/app/repositories/profile"
 	auth_service "test-kreditplus/src/app/services/auth"
 	profile_service "test-kreditplus/src/app/services/profile"
@@ -12,6 +13,7 @@ import (
 type repositories struct {
 	AuthRepo    *auth_repo.AuthRepository
 	ProfileRepo *profile_repo.ProfileRepository
+	LimitRepo   *limit_repo.LimitRepository
 }
 
 type services struct {
@@ -38,6 +40,11 @@ func initRepositories() *repositories {
 		log.Panic(err)
 	}
 
+	r.LimitRepo, err = limit_repo.NewLimitRepository(config.DB())
+	if err != nil {
+		log.Panic(err)
+	}
+
 	return &r
 }
 
@@ -45,7 +52,7 @@ func initServices(r *repositories) *services {
 
 	return &services{
 		AuthSVC:    auth_service.NewAuthService(r.AuthRepo),
-		ProfileSVC: profile_service.NewProfileService(r.ProfileRepo),
+		ProfileSVC: profile_service.NewProfileService(r.ProfileRepo, r.LimitRepo),
 	}
 }
 

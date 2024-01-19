@@ -6,11 +6,13 @@ import (
 
 type ProfileService struct {
 	profileRepo ProfileRepository
+	limitRepo   LimitRepository
 }
 
-func NewProfileService(profileRepo ProfileRepository) *ProfileService {
+func NewProfileService(profileRepo ProfileRepository, limitRepo LimitRepository) *ProfileService {
 	return &ProfileService{
 		profileRepo: profileRepo,
+		limitRepo:   limitRepo,
 	}
 }
 
@@ -18,7 +20,6 @@ type ProfileRepository interface {
 	Create(request entities.Profile) (response *entities.Profile, err error)
 }
 
-// type ProfileRepository interface {
-// 	Create(request entities.Auth) (response *entities.Auth, err error)
-// 	Login(username string, password string) (token string, err error)
-// }
+type LimitRepository interface {
+	Create(request entities.Limit) (response *entities.Limit, err error)
+}

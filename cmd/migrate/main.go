@@ -19,26 +19,15 @@ import (
 
 func main() {
 
-	// err := config.Init()
-	// if err != nil {
-	// 	panic(err)
-	// }
-
 	cfg, err := config.InitConfig()
 	if err != nil {
 		panic(err)
 	}
-	// database connection
+
 	db, _ := ConnectDataBase(cfg.Postgres)
 	sqlDB, _ := db.DB()
 	defer sqlDB.Close()
 
-	// app := src.Dependencies()
-
-	// // router
-	// r := routes.SetupRouter(app)
-	// // just remove port 8080
-	// r.Run()
 }
 
 func ConnectDataBase(conn config.Postgres) (*gorm.DB, error) {
@@ -55,7 +44,7 @@ func ConnectDataBase(conn config.Postgres) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	db.AutoMigrate(&entities.Auth{}, &entities.Profile{})
+	db.AutoMigrate(&entities.Auth{}, &entities.Profile{}, &entities.Limit{})
 
 	return db, err
 }

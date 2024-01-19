@@ -5,7 +5,7 @@ import (
 	"test-kreditplus/src/app/entities"
 )
 
-func (u ProfileService) Create(request contract.ProfileInput) (response *contract.ProfileInput, err error) {
+func (p ProfileService) Create(request contract.ProfileInput) (response *contract.ProfileInput, err error) {
 
 	profile := entities.Profile{}
 	profile.AuthID = request.AuthID
@@ -18,23 +18,38 @@ func (u ProfileService) Create(request contract.ProfileInput) (response *contrac
 	profile.KtpImage = request.KtpImage
 	profile.SelfieImage = request.SelfieImage
 
-	_, err = u.profileRepo.Create(profile)
+	_, err = p.profileRepo.Create(profile)
+	if err != nil {
+		return nil, err
+	}
+
+	var limit1, limit2, limit3, limit6 float32
+
+	if profile.Salary*0.1 <= 750000 {
+		limit1 = 100000
+		limit2 = 200000
+		limit3 = 500000
+		limit6 = 700000
+	} else {
+		limit1 = 1000000
+		limit2 = 1200000
+		limit3 = 1500000
+		limit6 = 2000000
+	}
+
+	limit := entities.Limit{
+		AuthID: request.AuthID,
+		Tenor1: limit1,
+		Tenor2: limit2,
+		Tenor3: limit3,
+		Tenor4: limit6,
+	}
+
+	_, err = p.limitRepo.Create(limit)
 	if err != nil {
 		return nil, err
 	}
 
 	response = &request
-
 	return
 }
-
-// func (u ProfileService) Login(request contract.LoginInput) (token string, err error) {
-
-// 	profile := entities.Profile{}
-// 	profile.Email = request.Email
-// 	profile.Password = request.Password
-
-// 	token, err = u.profileRepo.Login(profile.Email, profile.Password)
-
-// 	return
-// }

@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func (u AuthService) Create(request contract.RegisterInput) (response *contract.RegisterOutput, err error) {
+func (a AuthService) Create(request contract.RegisterInput) (response *contract.RegisterOutput, err error) {
 
 	auth := entities.Auth{}
 	auth.Email = request.Email
@@ -14,7 +14,7 @@ func (u AuthService) Create(request contract.RegisterInput) (response *contract.
 	auth.Password = request.Password
 	auth.LastLogin = time.Now()
 
-	result, err := u.authRepo.Create(auth)
+	result, err := a.authRepo.Create(auth)
 	if err != nil {
 		return nil, err
 	}
@@ -28,17 +28,17 @@ func (u AuthService) Create(request contract.RegisterInput) (response *contract.
 	return
 }
 
-func (u AuthService) Login(request contract.LoginInput) (token string, err error) {
+func (a AuthService) Login(request contract.LoginInput) (token string, err error) {
 
 	auth := entities.Auth{}
 	auth.Email = request.Email
 	auth.Password = request.Password
 
-	token, err = u.authRepo.Login(auth.Email, auth.Password)
+	token, err = a.authRepo.Login(auth.Email, auth.Password)
 
 	return
 }
 
-func (u AuthService) Get(id uint) (response entities.Auth, err error) {
-	return u.authRepo.Get(id)
+func (a AuthService) Get(id uint) (response entities.Auth, err error) {
+	return a.authRepo.Get(id)
 }

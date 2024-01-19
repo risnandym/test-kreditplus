@@ -19,7 +19,5 @@ func ConnectDataBase(conn Postgres) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	// db.AutoMigrate(&entities.Auth{})
-
 	return db, err
 }
