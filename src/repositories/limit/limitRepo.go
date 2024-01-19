@@ -1,7 +1,7 @@
 package limit_repo
 
 import (
-	"test-kreditplus/src/app/entities"
+	"test-kreditplus/src/entities"
 	"time"
 
 	"gorm.io/gorm"

@@ -3,7 +3,7 @@ package src
 import (
 	"net/http"
 	"test-kreditplus/core/middlewares"
-	"test-kreditplus/src/app/handlers"
+	"test-kreditplus/src/handlers"
 
 	"github.com/gin-gonic/gin"
 

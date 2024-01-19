@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"net/http"
-	"test-kreditplus/src/app/contract"
+	"test-kreditplus/src/contract"
 
 	"github.com/gin-gonic/gin"
 )

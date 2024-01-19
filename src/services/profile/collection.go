@@ -1,7 +1,7 @@
 package profile_service
 
 import (
-	"test-kreditplus/src/app/entities"
+	"test-kreditplus/src/entities"
 )
 
 type ProfileService struct {

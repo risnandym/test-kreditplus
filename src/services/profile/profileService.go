@@ -1,8 +1,8 @@
 package profile_service
 
 import (
-	"test-kreditplus/src/app/contract"
-	"test-kreditplus/src/app/entities"
+	"test-kreditplus/src/contract"
+	"test-kreditplus/src/entities"
 )
 
 func (p ProfileService) Create(request contract.ProfileInput) (response *contract.ProfileInput, err error) {

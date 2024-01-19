@@ -3,11 +3,11 @@ package src
 import (
 	"log"
 	"test-kreditplus/core/config"
-	auth_repo "test-kreditplus/src/app/repositories/auth"
-	limit_repo "test-kreditplus/src/app/repositories/limit"
-	profile_repo "test-kreditplus/src/app/repositories/profile"
-	auth_service "test-kreditplus/src/app/services/auth"
-	profile_service "test-kreditplus/src/app/services/profile"
+	auth_repo "test-kreditplus/src/repositories/auth"
+	limit_repo "test-kreditplus/src/repositories/limit"
+	profile_repo "test-kreditplus/src/repositories/profile"
+	auth_service "test-kreditplus/src/services/auth"
+	profile_service "test-kreditplus/src/services/profile"
 )
 
 type repositories struct {

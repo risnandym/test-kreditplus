@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"test-kreditplus/src/app/contract"
-	"test-kreditplus/src/app/entities"
+	"test-kreditplus/src/contract"
+	"test-kreditplus/src/entities"
 )
 
 type AuthService interface {

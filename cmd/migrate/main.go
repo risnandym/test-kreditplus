@@ -2,7 +2,7 @@ package main
 
 import (
 	"test-kreditplus/core/config"
-	"test-kreditplus/src/app/entities"
+	"test-kreditplus/src/entities"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

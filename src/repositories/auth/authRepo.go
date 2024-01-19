@@ -4,7 +4,7 @@ import (
 	"log"
 	"test-kreditplus/core/config"
 	"test-kreditplus/core/utils"
-	"test-kreditplus/src/app/entities"
+	"test-kreditplus/src/entities"
 	"time"
 
 	"github.com/google/uuid"

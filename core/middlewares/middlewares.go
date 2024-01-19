@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"test-kreditplus/core/config"
 	"test-kreditplus/core/utils"
-	"test-kreditplus/src/app/handlers"
+	"test-kreditplus/src/handlers"
 
 	"github.com/gin-gonic/gin"
 )

@@ -1,7 +1,7 @@
 package auth_service
 
 import (
-	"test-kreditplus/src/app/entities"
+	"test-kreditplus/src/entities"
 )
 
 type AuthService struct {

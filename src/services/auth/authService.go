@@ -1,8 +1,8 @@
 package auth_service
 
 import (
-	"test-kreditplus/src/app/contract"
-	"test-kreditplus/src/app/entities"
+	"test-kreditplus/src/contract"
+	"test-kreditplus/src/entities"
 	"time"
 )
 
