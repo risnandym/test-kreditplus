@@ -1,19 +1,19 @@
 package handlers
 
 import (
-	"kredit_plus/app/src/contract"
 	"net/http"
+	"test-kreditplus/src/app/contract"
 
 	"github.com/gin-gonic/gin"
 )
 
 // GetAllCommentNews godoc
-// @Summary Get all Comment.
-// @Description Get a list of Comment.
-// @Tags Comment News
-// @Produce json
-// @Success 200 {object} []entities.CommentsNews
-// @Router /comments-news [get]
+//	@Summary		Get all Comment.
+//	@Description	Get a list of Comment.
+//	@Tags			Comment News
+//	@Produce		json
+//	@Success		200	{object}	[]entities.CommentsNews
+//	@Router			/comments-news [get]
 // func GetAllCommentNews(c *gin.Context) {
 // 	// get db from gin context
 // 	db := c.MustGet("app").(*gorm.DB)
@@ -24,15 +24,16 @@ import (
 // }
 
 // CreateCommentNews godoc
-// @Summary Create New Comment.
-// @Description Creating a new Comment.
-// @Tags Comment News
-// @Param Body body commentNewsInput true "the body to create a new Comment"
-// @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
-// @Security BearerToken
-// @Produce json
-// @Success 200 {object} entities.CommentsNews
-// @Router /comments-news [post]
+//
+//	@Summary		Create Profile.
+//	@Description	Save Customer Profile.
+//	@Tags			Customer
+//	@Param			Body			body	contract.ProfileInput	true	"the body to create a new Profile"
+//	@Param			Authorization	header	string					true	"Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
+//	@Security		BearerToken
+//	@Produce		json
+//	@Success		200	{object}	contract.ProfileInput
+//	@Router			/kredit-plus/customer/profile [post]
 func CreateProfile(svc ProfileService) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
@@ -53,15 +54,15 @@ func CreateProfile(svc ProfileService) gin.HandlerFunc {
 }
 
 // DeleteCommentNews godoc
-// @Summary Delete one Comment.
-// @Description Delete a Comment by id.
-// @Tags Comment News
-// @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
-// @Security BearerToken
-// @Produce json
-// @Param id path string true "Comment id"
-// @Success 200 {object} map[string]boolean
-// @Router /comments-news/{id} [delete]
+//	@Summary		Delete one Comment.
+//	@Description	Delete a Comment by id.
+//	@Tags			Comment News
+//	@Param			Authorization	header	string	true	"Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
+//	@Security		BearerToken
+//	@Produce		json
+//	@Param			id	path		string	true	"Comment id"
+//	@Success		200	{object}	map[string]boolean
+//	@Router			/comments-news/{id} [delete]
 // func DeleteCommentNews(c *gin.Context) {
 // 	// Get model if exist
 // 	db := c.MustGet("app").(*gorm.DB)

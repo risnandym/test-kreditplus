@@ -1,12 +1,12 @@
 package app
 
 import (
-	auth_repo "kredit_plus/app/src/repositories/auth"
-	profile_repo "kredit_plus/app/src/repositories/profile"
-	auth_service "kredit_plus/app/src/services/auth"
-	profile_service "kredit_plus/app/src/services/profile"
-	"kredit_plus/core/config"
 	"log"
+	"test-kreditplus/core/config"
+	auth_repo "test-kreditplus/src/app/repositories/auth"
+	profile_repo "test-kreditplus/src/app/repositories/profile"
+	auth_service "test-kreditplus/src/app/services/auth"
+	profile_service "test-kreditplus/src/app/services/profile"
 )
 
 type repositories struct {

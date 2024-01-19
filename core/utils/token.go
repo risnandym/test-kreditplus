@@ -2,9 +2,9 @@ package utils
 
 import (
 	"fmt"
-	"kredit_plus/core/config"
 	"strconv"
 	"strings"
+	"test-kreditplus/core/config"
 	"time"
 
 	"github.com/gin-gonic/gin"

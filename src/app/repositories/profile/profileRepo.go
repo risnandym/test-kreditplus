@@ -1,7 +1,7 @@
 package profile_repo
 
 import (
-	"kredit_plus/app/src/entities"
+	"test-kreditplus/src/app/entities"
 	"time"
 
 	"gorm.io/gorm"

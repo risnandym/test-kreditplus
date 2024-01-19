@@ -1,0 +1,125 @@
+definitions:
+  contract.LoginInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  contract.ProfileInput:
+    properties:
+      auth_id:
+        type: integer
+      date_of_birth:
+        type: string
+      full_name:
+        type: string
+      ktp_image:
+        type: string
+      legal_name:
+        type: string
+      nik:
+        type: string
+      place_of_birth:
+        type: string
+      salary:
+        type: number
+      selfie_image:
+        type: string
+    type: object
+  contract.RegisterInput:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+    required:
+    - email
+    - password
+    - phone
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+paths:
+  /kredit-plus/customer/login:
+    post:
+      description: Logging in to get jwt token to access admin or user api by roles.
+      parameters:
+      - description: the body to login a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/contract.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login.
+      tags:
+      - Auth
+  /kredit-plus/customer/profile:
+    post:
+      description: Save Customer Profile.
+      parameters:
+      - description: the body to create a new Profile
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/contract.ProfileInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.ProfileInput'
+      security:
+      - BearerToken: []
+      summary: Create Profile.
+      tags:
+      - Customer
+  /kredit-plus/customer/register:
+    post:
+      description: registering a user from public access.
+      parameters:
+      - description: the body to register a user
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/contract.RegisterInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register a User.
+      tags:
+      - Auth
+swagger: "2.0"

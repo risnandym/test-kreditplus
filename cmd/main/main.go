@@ -1,8 +1,8 @@
 package main
 
 import (
-	"kredit_plus/app"
-	"kredit_plus/core/config"
+	"test-kreditplus/core/config"
+	app "test-kreditplus/src"
 )
 
 // @contact.name API Support

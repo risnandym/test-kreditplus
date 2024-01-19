@@ -1,7 +1,7 @@
 package contract
 
 import (
-	"kredit_plus/app/src/entities"
+	"test-kreditplus/src/app/entities"
 	"time"
 
 	"github.com/gin-gonic/gin"

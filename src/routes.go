@@ -1,9 +1,9 @@
 package app
 
 import (
-	"kredit_plus/app/src/handlers"
-	"kredit_plus/core/middlewares"
 	"net/http"
+	"test-kreditplus/core/middlewares"
+	"test-kreditplus/src/app/handlers"
 
 	"github.com/gin-gonic/gin"
 
@@ -27,6 +27,7 @@ func SetupRouter(app *Dependency) *gin.Engine {
 
 	// r.POST("/register-admin", handlers.RegisterAdmin)
 	base := r.Group("/kredit-plus/customer")
+	base.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	base.POST("/register", handlers.Register(app.Services.AuthSVC))
 	base.POST("/login", handlers.Login(app.Services.AuthSVC))
 
@@ -88,8 +89,6 @@ func SetupRouter(app *Dependency) *gin.Engine {
 
 	// r.GET("/comments-news", handlers.GetAllCommentNews)
 	// // r.GET("/comments-news/:id", handlers.GetCommentNewsById)
-
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return r
 }

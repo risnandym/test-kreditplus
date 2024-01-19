@@ -1,10 +1,10 @@
 package auth_repo
 
 import (
-	"kredit_plus/app/src/entities"
-	"kredit_plus/core/config"
-	"kredit_plus/core/utils"
 	"log"
+	"test-kreditplus/core/config"
+	"test-kreditplus/core/utils"
+	"test-kreditplus/src/app/entities"
 	"time"
 
 	"github.com/google/uuid"

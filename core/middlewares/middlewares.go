@@ -1,11 +1,11 @@
 package middlewares
 
 import (
-	"kredit_plus/app/src/handlers"
-	"kredit_plus/core/config"
-	"kredit_plus/core/utils"
 	"log"
 	"net/http"
+	"test-kreditplus/core/config"
+	"test-kreditplus/core/utils"
+	"test-kreditplus/src/app/handlers"
 
 	"github.com/gin-gonic/gin"
 )
