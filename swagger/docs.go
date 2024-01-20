@@ -80,13 +80,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/contract.ProfileInput"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "description": "Authorization. How to input in swagger : 'Bearer \u003cinsert_your_token_here\u003e'",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -155,13 +148,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/contract.TransactionInput"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "description": "Authorization. How to input in swagger : 'Bearer \u003cinsert_your_token_here\u003e'",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
                     }
                 ],
                 "responses": {

@@ -165,11 +165,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/contract.ProfileInput'
-      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:
@@ -213,11 +208,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/contract.TransactionInput'
-      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
-        in: header
-        name: Authorization
-        required: true
-        type: string
       produces:
       - application/json
       responses:
