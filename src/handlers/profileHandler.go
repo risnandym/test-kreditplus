@@ -28,7 +28,7 @@ import (
 //	@Summary		Create Profile.
 //	@Description	Save Customer Profile.
 //	@Tags			Customer
-//	@Param			Body			body	contract.ProfileInput	true	"the body to create a new Profile"
+//	@Param			Body	body	contract.ProfileInput	true	"the body to create a new Profile"
 //	@Security		kreditplus-token
 //	@Produce		json
 //	@Success		200	{object}	contract.ProfileInput

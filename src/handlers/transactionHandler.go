@@ -34,7 +34,7 @@ import (
 //	@Summary		Create New Transaction. (Admin only)
 //	@Description	Creating a new Transaction.
 //	@Tags			Transaction
-//	@Param			Body			body	contract.TransactionInput	true	"the body to create a new transaction"
+//	@Param			Body	body	contract.TransactionInput	true	"the body to create a new transaction"
 //	@Security		kreditplus-token
 //	@Produce		json
 //	@Success		200	{object}	contract.TransactionOutput
