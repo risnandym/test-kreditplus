@@ -33,6 +33,7 @@ type (
 		APISecret     string `mapstructure:"API_SECRET" validate:"required"`
 
 		ServiceName string   `mapstructure:"SERVICE_NAME"`
+		ServiceHost string   `mapstructure:"SERVICE_HOST"`
 		Postgres    Postgres `mapstructure:",squash"`
 		Swagger     Swagger  `mapstructure:",squash"`
 	}

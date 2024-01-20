@@ -25,7 +25,6 @@ func SetupRouter(app *Dependency) *gin.Engine {
 		})
 	})
 
-	// r.POST("/register-admin", handlers.RegisterAdmin)
 	base := r.Group("/kredit-plus/customer")
 	base.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	base.POST("/register", handlers.Register(app.Services.AuthSVC))
@@ -34,6 +33,13 @@ func SetupRouter(app *Dependency) *gin.Engine {
 	profile := base.Group("/profile")
 	profile.Use(middlewares.PublicMiddleware(app.Services.AuthSVC))
 	profile.POST("/", handlers.CreateProfile(app.Services.ProfileSVC))
+
+	Transaction := base.Group("/transaction")
+	Transaction.POST("/credit", handlers.CreditTransaction(app.Services.TransactionSVC))
+	// Transaction.POST("/dedit", handlers.DebitTransaction(app.Services.TransactionSVC))
+
+	// r.POST("/register-admin", handlers.RegisterAdmin)
+
 	// commentnewsMiddlewareroute.DELETE("/:id", handlers.DeleteCommentNews)
 
 	// AccountMiddlewareroute := r.Group("/change-password")
@@ -73,9 +79,7 @@ func SetupRouter(app *Dependency) *gin.Engine {
 	// r.GET("/news/:id", handlers.GetNewsById)
 	// r.GET("/news/:id/comments", handlers.GetCommentByNewsId)
 
-	// newsMiddlewareroute := r.Group("/news")
 	// newsMiddlewareroute.Use(middlewares.AdminMiddleware())
-	// newsMiddlewareroute.POST("/", handlers.CreateNews)
 	// newsMiddlewareroute.PATCH("/:id", handlers.UpdateNews)
 	// newsMiddlewareroute.DELETE("/:id", handlers.DeleteNews)
 

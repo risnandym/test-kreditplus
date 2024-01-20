@@ -14,6 +14,4 @@ type Profile struct {
 	KtpImage     string    `json:"ktp_image"`
 	SelfieImage  string    `json:"selfie_image"`
 	TimeStamp
-
-	Auth Auth `json:"-"`
 }

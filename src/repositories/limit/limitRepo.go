@@ -25,5 +25,29 @@ func (l LimitRepository) Create(request entities.Limit) (response *entities.Limi
 		return
 	}
 
+	response = &request
+	return
+}
+
+func (l LimitRepository) Update(db *gorm.DB, request *entities.Limit) (response *entities.Limit, err error) {
+	if db != nil {
+		l.db = db
+	}
+
+	request.UpdatedAt = time.Now()
+	if err = l.db.Save(&request).Error; err != nil {
+		return
+	}
+
+	response = request
+	return
+}
+
+func (l LimitRepository) Get(id uint) (response *entities.Limit, err error) {
+
+	if err = l.db.Where("id = ?", id).First(&response).Error; err != nil {
+		return
+	}
+
 	return
 }

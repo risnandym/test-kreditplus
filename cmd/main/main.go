@@ -15,6 +15,11 @@ import (
 //	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
 //	@termsOfService	http://swagger.io/terms/
 
+//	@securitydefinitions.apikey	kreditplus-token
+//	@description				Value is: "Bearer {access_token}", where access_token is retrieved from cms-service/v1/login
+//	@in							header
+//	@name						Authorization
+
 func main() {
 
 	err := config.Init()

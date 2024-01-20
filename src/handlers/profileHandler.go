@@ -29,8 +29,7 @@ import (
 //	@Description	Save Customer Profile.
 //	@Tags			Customer
 //	@Param			Body			body	contract.ProfileInput	true	"the body to create a new Profile"
-//	@Param			Authorization	header	string					true	"Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
-//	@Security		BearerToken
+//	@Security		kreditplus-token
 //	@Produce		json
 //	@Success		200	{object}	contract.ProfileInput
 //	@Router			/kredit-plus/customer/profile [post]

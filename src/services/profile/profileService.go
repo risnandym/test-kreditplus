@@ -42,7 +42,7 @@ func (p ProfileService) Create(request contract.ProfileInput) (response *contrac
 		Tenor1: limit1,
 		Tenor2: limit2,
 		Tenor3: limit3,
-		Tenor4: limit6,
+		Tenor6: limit6,
 	}
 
 	_, err = p.limitRepo.Create(limit)

@@ -52,7 +52,7 @@
             "post": {
                 "security": [
                     {
-                        "BearerToken": []
+                        "kreditplus-token": []
                     }
                 ],
                 "description": "Save Customer Profile.",
@@ -118,6 +118,49 @@
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/news": {
+            "post": {
+                "security": [
+                    {
+                        "kreditplus-token": []
+                    }
+                ],
+                "description": "Creating a new Transaction.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Create New Transaction. (Admin only)",
+                "parameters": [
+                    {
+                        "description": "the body to create a new transaction",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.TransactionInput"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Authorization. How to input in swagger : 'Bearer \u003cinsert_your_token_here\u003e'",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.TransactionOutput"
                         }
                     }
                 }
@@ -200,6 +243,119 @@
                     "type": "string"
                 }
             }
+        },
+        "contract.TransactionInput": {
+            "type": "object",
+            "properties": {
+                "admin_fee": {
+                    "type": "number"
+                },
+                "asset_id": {
+                    "type": "integer"
+                },
+                "auth_id": {
+                    "type": "integer"
+                },
+                "contract_number": {
+                    "type": "string"
+                },
+                "installment_amount": {
+                    "type": "number"
+                },
+                "installment_period": {
+                    "type": "integer"
+                },
+                "interest_amount": {
+                    "type": "number"
+                },
+                "otr_amount": {
+                    "type": "number"
+                },
+                "sales_channel": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.TransactionOutput": {
+            "type": "object",
+            "properties": {
+                "admin_fee": {
+                    "type": "number"
+                },
+                "asset_id": {
+                    "type": "integer"
+                },
+                "auth_id": {
+                    "type": "integer"
+                },
+                "contract_number": {
+                    "type": "string"
+                },
+                "installment_amount": {
+                    "type": "number"
+                },
+                "installment_period": {
+                    "type": "integer"
+                },
+                "interest_amount": {
+                    "type": "number"
+                },
+                "limit": {
+                    "$ref": "#/definitions/entities.Limit"
+                },
+                "otr_amount": {
+                    "type": "number"
+                },
+                "sales_channel": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.Limit": {
+            "type": "object",
+            "properties": {
+                "auth_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "deleted_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "tenor1": {
+                    "type": "number"
+                },
+                "tenor2": {
+                    "type": "number"
+                },
+                "tenor3": {
+                    "type": "number"
+                },
+                "tenor4": {
+                    "type": "number"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "kreditplus-token": {
+            "description": "Value is: \"Bearer {access_token}\", where access_token is retrieved from cms-service/v1/login",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

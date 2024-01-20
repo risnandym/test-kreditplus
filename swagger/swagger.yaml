@@ -52,6 +52,75 @@ definitions:
     - password
     - phone
     type: object
+  contract.TransactionInput:
+    properties:
+      admin_fee:
+        type: number
+      asset_id:
+        type: integer
+      auth_id:
+        type: integer
+      contract_number:
+        type: string
+      installment_amount:
+        type: number
+      installment_period:
+        type: integer
+      interest_amount:
+        type: number
+      otr_amount:
+        type: number
+      sales_channel:
+        type: string
+      uuid:
+        type: string
+    type: object
+  contract.TransactionOutput:
+    properties:
+      admin_fee:
+        type: number
+      asset_id:
+        type: integer
+      auth_id:
+        type: integer
+      contract_number:
+        type: string
+      installment_amount:
+        type: number
+      installment_period:
+        type: integer
+      interest_amount:
+        type: number
+      limit:
+        $ref: '#/definitions/entities.Limit'
+      otr_amount:
+        type: number
+      sales_channel:
+        type: string
+      uuid:
+        type: string
+    type: object
+  entities.Limit:
+    properties:
+      auth_id:
+        type: integer
+      created_at:
+        type: string
+      deleted_at:
+        type: string
+      id:
+        type: integer
+      tenor1:
+        type: number
+      tenor2:
+        type: number
+      tenor3:
+        type: number
+      tenor4:
+        type: number
+      updated_at:
+        type: string
+    type: object
 info:
   contact:
     email: support@swagger.io
@@ -109,7 +178,7 @@ paths:
           schema:
             $ref: '#/definitions/contract.ProfileInput'
       security:
-      - BearerToken: []
+      - kreditplus-token: []
       summary: Create Profile.
       tags:
       - Customer
@@ -134,4 +203,38 @@ paths:
       summary: Register a User.
       tags:
       - Auth
+  /news:
+    post:
+      description: Creating a new Transaction.
+      parameters:
+      - description: the body to create a new transaction
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/contract.TransactionInput'
+      - description: 'Authorization. How to input in swagger : ''Bearer <insert_your_token_here>'''
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.TransactionOutput'
+      security:
+      - kreditplus-token: []
+      summary: Create New Transaction. (Admin only)
+      tags:
+      - Transaction
+securityDefinitions:
+  kreditplus-token:
+    description: 'Value is: "Bearer {access_token}", where access_token is retrieved
+      from cms-service/v1/login'
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

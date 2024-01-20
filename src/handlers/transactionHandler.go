@@ -1,5 +1,12 @@
 package handlers
 
+import (
+	"net/http"
+	"test-kreditplus/src/contract"
+
+	"github.com/gin-gonic/gin"
+)
+
 // type newsInput struct {
 // 	Title    string `json:"title"`
 // 	Content  string `json:"content"`
@@ -22,36 +29,34 @@ package handlers
 // 	c.JSON(http.StatusOK, gin.H{"data": news})
 // }
 
-// // CreateNews godoc
-// // @Summary Create New News. (Admin only)
-// // @Description Creating a new News.
-// // @Tags News
-// // @Param Body body newsInput true "the body to create a new phone"
-// // @Param Authorization header string true "Authorization. How to input in swagger : 'Bearer <insert_your_token_here>'"
-// // @Security BearerToken
-// // @Produce json
-// // @Success 200 {object} entities.News
-// // @Router /news [post]
-// func CreateNews(c *gin.Context) {
-// 	db := c.MustGet("app").(*gorm.DB)
+// CreateTransaction godoc
+//
+//	@Summary		Create New Transaction. (Admin only)
+//	@Description	Creating a new Transaction.
+//	@Tags			Transaction
+//	@Param			Body			body	contract.TransactionInput	true	"the body to create a new transaction"
+//	@Security		kreditplus-token
+//	@Produce		json
+//	@Success		200	{object}	contract.TransactionOutput
+//	@Router			/news [post]
+func CreditTransaction(svc TransactionService) gin.HandlerFunc {
+	return func(c *gin.Context) {
 
-// 	// Validate input
-// 	var input newsInput
-// 	if err := c.ShouldBindJSON(&input); err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
+		request, err := contract.ValidateAndBuildCreditInput(c)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
-// 	// Get user active info
-// 	user, _ := c.Get("user")
-// 	users := user.(entities.Auth)
+		response, err := svc.Credit(request)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 
-// 	// Create News
-// 	news := entities.News{CreatorName: users.Email, UserID: users.ID, Title: input.Title, Content: input.Content, Link_URL: input.Link_URL}
-// 	db.Create(&news)
-
-// 	c.JSON(http.StatusOK, gin.H{"data": news})
-// }
+		c.JSON(http.StatusOK, gin.H{"data": response})
+	}
+}
 
 // // GetNewsById godoc
 // // @Summary Get News by Id.

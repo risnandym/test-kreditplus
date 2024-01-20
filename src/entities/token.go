@@ -12,6 +12,4 @@ type Token struct {
 	AccessTokenExpiredAt  time.Time `json:"access_token_expired_at"`
 	RefreshTokenExpiredAt time.Time `json:"refresh_token_expired_at"`
 	TimeStamp
-
-	Auth Auth `json:"-"`
 }

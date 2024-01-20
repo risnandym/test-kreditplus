@@ -19,14 +19,14 @@ type ProfileInput struct {
 	SelfieImage  string    `json:"selfie_image" validate:"required"`
 }
 
-func ValidateAndBuildProfileInput(c *gin.Context) (input ProfileInput, err error) {
+func ValidateAndBuildProfileInput(c *gin.Context) (request ProfileInput, err error) {
 	authctx, _ := c.Get("auth")
 	auth := authctx.(entities.Auth)
 
-	if err = c.ShouldBindJSON(&input); err != nil {
+	if err = c.ShouldBindJSON(&request); err != nil {
 		return
 	}
 
-	input.AuthID = int(auth.ID)
+	request.AuthID = int(auth.ID)
 	return
 }

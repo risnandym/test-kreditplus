@@ -14,3 +14,7 @@ type AuthService interface {
 type ProfileService interface {
 	Create(request contract.ProfileInput) (response *contract.ProfileInput, err error)
 }
+
+type TransactionService interface {
+	Credit(request contract.TransactionInput) (response *contract.TransactionOutput, err error)
+}

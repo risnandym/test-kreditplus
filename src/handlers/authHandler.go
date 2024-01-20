@@ -37,7 +37,7 @@ func Login(svc AuthService) gin.HandlerFunc {
 
 		response, err := svc.Login(request)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "username or password is incorrect."})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "username or password is incorrect."})
 			return
 		}
 
@@ -65,7 +65,7 @@ func Register(svc AuthService) gin.HandlerFunc {
 
 		response, err := svc.Create(request)
 		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
