@@ -253,9 +253,6 @@ const docTemplate = `{
                 },
                 "total_interest": {
                     "type": "number"
-                },
-                "uuid": {
-                    "type": "string"
                 }
             }
         },

@@ -62,8 +62,6 @@ definitions:
         type: string
       total_interest:
         type: number
-      uuid:
-        type: string
     type: object
   contract.Limit:
     properties:
