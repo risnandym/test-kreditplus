@@ -16,7 +16,43 @@
         "version": "1.0"
     },
     "paths": {
-        "/kredit-plus/customer/login": {
+        "/kredit-plus/customer/profile": {
+            "post": {
+                "security": [
+                    {
+                        "kreditplus-token": []
+                    }
+                ],
+                "description": "Save Customer Profile.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Create Profile.",
+                "parameters": [
+                    {
+                        "description": "the body to create a new Profile",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.ProfileInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ProfileOutput"
+                        }
+                    }
+                }
+            }
+        },
+        "/kredit-plus/login": {
             "post": {
                 "description": "Logging in to get jwt token to access admin or user api by roles.",
                 "produces": [
@@ -48,50 +84,7 @@
                 }
             }
         },
-        "/kredit-plus/customer/profile": {
-            "post": {
-                "security": [
-                    {
-                        "BearerToken": []
-                    }
-                ],
-                "description": "Save Customer Profile.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Customer"
-                ],
-                "summary": "Create Profile.",
-                "parameters": [
-                    {
-                        "description": "the body to create a new Profile",
-                        "name": "Body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/contract.ProfileInput"
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "description": "Authorization. How to input in swagger : 'Bearer \u003cinsert_your_token_here\u003e'",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/contract.ProfileInput"
-                        }
-                    }
-                }
-            }
-        },
-        "/kredit-plus/customer/register": {
+        "/kredit-plus/register": {
             "post": {
                 "description": "registering a user from public access.",
                 "produces": [
@@ -122,9 +115,156 @@
                     }
                 }
             }
+        },
+        "/kredit-plus/transaction/credit": {
+            "post": {
+                "security": [
+                    {
+                        "kreditplus-token": []
+                    }
+                ],
+                "description": "Creating a new Credit Transaction.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Create New Credit Transaction. (Admin only)",
+                "parameters": [
+                    {
+                        "description": "the body to create a new credit transaction",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreditInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.CreditOutput"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "contract.Asset": {
+            "type": "object",
+            "required": [
+                "description",
+                "name",
+                "price",
+                "type"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.CreditInput": {
+            "type": "object",
+            "required": [
+                "assets",
+                "auth_id",
+                "installment_period",
+                "otr_amount",
+                "sales_channel"
+            ],
+            "properties": {
+                "assets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/contract.Asset"
+                    }
+                },
+                "auth_id": {
+                    "type": "integer"
+                },
+                "installment_period": {
+                    "type": "integer"
+                },
+                "otr_amount": {
+                    "type": "number"
+                },
+                "sales_channel": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.CreditOutput": {
+            "type": "object",
+            "properties": {
+                "admin_fee": {
+                    "type": "number"
+                },
+                "assets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/contract.Asset"
+                    }
+                },
+                "auth_id": {
+                    "type": "integer"
+                },
+                "contract_number": {
+                    "type": "string"
+                },
+                "installment_amount": {
+                    "type": "number"
+                },
+                "installment_period": {
+                    "type": "integer"
+                },
+                "interest": {
+                    "type": "number"
+                },
+                "limit": {
+                    "$ref": "#/definitions/contract.Limit"
+                },
+                "otr_amount": {
+                    "type": "number"
+                },
+                "sales_channel": {
+                    "type": "string"
+                },
+                "total_interest": {
+                    "type": "number"
+                }
+            }
+        },
+        "contract.Limit": {
+            "type": "object",
+            "properties": {
+                "tenor1": {
+                    "type": "number"
+                },
+                "tenor2": {
+                    "type": "number"
+                },
+                "tenor3": {
+                    "type": "number"
+                },
+                "tenor6": {
+                    "type": "number"
+                }
+            }
+        },
         "contract.LoginInput": {
             "type": "object",
             "required": [
@@ -182,6 +322,51 @@
                 }
             }
         },
+        "contract.ProfileOutput": {
+            "type": "object",
+            "required": [
+                "date_of_birth",
+                "full_name",
+                "ktp_image",
+                "legal_name",
+                "nik",
+                "place_of_birth",
+                "salary",
+                "selfie_image"
+            ],
+            "properties": {
+                "auth_id": {
+                    "type": "integer"
+                },
+                "date_of_birth": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "ktp_image": {
+                    "type": "string"
+                },
+                "legal_name": {
+                    "type": "string"
+                },
+                "limit": {
+                    "$ref": "#/definitions/contract.Limit"
+                },
+                "nik": {
+                    "type": "string"
+                },
+                "place_of_birth": {
+                    "type": "string"
+                },
+                "salary": {
+                    "type": "number"
+                },
+                "selfie_image": {
+                    "type": "string"
+                }
+            }
+        },
         "contract.RegisterInput": {
             "type": "object",
             "required": [
@@ -200,6 +385,14 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "kreditplus-token": {
+            "description": "Value is: \"Bearer {access_token}\", where access_token is retrieved from cms-service/v1/login",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

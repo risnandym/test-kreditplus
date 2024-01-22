@@ -3,11 +3,13 @@ package profile_service
 import (
 	"test-kreditplus/src/contract"
 	"test-kreditplus/src/entities"
+
+	"gorm.io/gorm"
 )
 
-func (p ProfileService) Create(request contract.ProfileInput) (response *contract.ProfileInput, err error) {
+func (p ProfileService) Create(request contract.ProfileInput) (response *contract.ProfileOutput, err error) {
 
-	profile := entities.Profile{}
+	profile := &entities.Profile{}
 	profile.AuthID = request.AuthID
 	profile.NIK = request.NIK
 	profile.FullName = request.FullName
@@ -18,12 +20,7 @@ func (p ProfileService) Create(request contract.ProfileInput) (response *contrac
 	profile.KtpImage = request.KtpImage
 	profile.SelfieImage = request.SelfieImage
 
-	_, err = p.profileRepo.Create(profile)
-	if err != nil {
-		return nil, err
-	}
-
-	var limit1, limit2, limit3, limit6 float32
+	var limit1, limit2, limit3, limit6 float64
 
 	if profile.Salary*0.1 <= 750000 {
 		limit1 = 100000
@@ -37,19 +34,37 @@ func (p ProfileService) Create(request contract.ProfileInput) (response *contrac
 		limit6 = 2000000
 	}
 
-	limit := entities.Limit{
+	limit := &entities.Limit{
 		AuthID: request.AuthID,
 		Tenor1: limit1,
 		Tenor2: limit2,
 		Tenor3: limit3,
-		Tenor4: limit6,
+		Tenor6: limit6,
 	}
 
-	_, err = p.limitRepo.Create(limit)
-	if err != nil {
-		return nil, err
-	}
+	err = p.db.Transaction(func(db *gorm.DB) error {
 
-	response = &request
+		_, err = p.profileRepo.Create(db, profile)
+		if err != nil {
+			return err
+		}
+
+		limit, err = p.limitRepo.Create(db, limit)
+		if err != nil {
+			return err
+		}
+
+		return err
+	})
+
+	response = &contract.ProfileOutput{
+		ProfileInput: request,
+		Limit: contract.Limit{
+			Tenor1: limit1,
+			Tenor2: limit2,
+			Tenor3: limit3,
+			Tenor6: limit6,
+		},
+	}
 	return
 }

@@ -44,7 +44,13 @@ func ConnectDataBase(conn config.Postgres) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	db.AutoMigrate(&entities.Auth{}, &entities.Profile{}, &entities.Limit{})
+	if err := db.Migrator().DropTable(&entities.Auth{}, &entities.Profile{}, &entities.Limit{}, &entities.Credit{}, &entities.Debit{}, &entities.Asset{}); err != nil {
+		return nil, err
+	}
+
+	if err := db.AutoMigrate(&entities.Auth{}, &entities.Profile{}, &entities.Limit{}, &entities.Credit{}, &entities.Debit{}, &entities.Asset{}); err != nil {
+		return nil, err
+	}
 
 	return db, err
 }

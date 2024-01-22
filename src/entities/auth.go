@@ -16,26 +16,32 @@ type Auth struct {
 	Password  string    `gorm:"not null;" json:"password"`
 	LastLogin time.Time `gorm:"not null;" json:"last_login"`
 	TimeStamp
+
+	Limit   Limit    `json:"-"`
+	Profile Profile  `json:"-"`
+	Credit  []Credit `json:"-"`
+	Debit   []Debit  `json:"-"`
+	Asset   []Asset  `json:"-"`
 }
 
-func (u *Auth) SaveUser(db *gorm.DB) (*Auth, error) {
+func (a *Auth) SaveUser(db *gorm.DB) (*Auth, error) {
 
-	hashedPassword, errPassword := u.GeneratePassword(u.Password)
+	hashedPassword, errPassword := a.GeneratePassword(a.Password)
 	if errPassword != nil {
 		return &Auth{}, errPassword
 	}
 
-	u.Password = string(hashedPassword)
+	a.Password = string(hashedPassword)
 
-	var err error = db.Create(&u).Error
+	var err error = db.Create(&a).Error
 	if err != nil {
 		return &Auth{}, err
 	}
 
-	return u, nil
+	return a, nil
 }
 
-func (u *Auth) GeneratePassword(pass string) (string, error) {
+func (a *Auth) GeneratePassword(pass string) (string, error) {
 	hashedPassword, errPassword := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
 	if errPassword != nil {
 		return "", errPassword

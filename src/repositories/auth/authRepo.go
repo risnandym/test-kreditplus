@@ -25,13 +25,14 @@ func NewAuthRepository(db *gorm.DB, config config.Configuration) (*AuthRepositor
 }
 
 func (a AuthRepository) Create(request entities.Auth) (response *entities.Auth, err error) {
-
+	log.Println(a.db)
 	request.UUID = uuid.New()
 	request.CreatedAt = time.Now()
 	request.UpdatedAt = time.Now()
 
 	response, err = request.SaveUser(a.db)
 	if err != nil {
+		log.Printf("auth create error: %v", err)
 		return
 	}
 
@@ -44,16 +45,19 @@ func (a AuthRepository) Login(email string, password string) (token string, err 
 
 	err = a.db.Model(entities.Auth{}).Where("email = ?", email).Take(&auth).Error
 	if err != nil {
+		log.Printf("auth login error: %v", err)
 		return "", err
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(auth.Password), []byte(password))
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
+		log.Printf("auth login error: %v", err)
 		return "", err
 	}
 
 	token, err = utils.GenerateToken(a.config, auth.ID, auth.UUID)
 	if err != nil {
+		log.Printf("auth login error: %v", err)
 		return "", err
 	}
 
@@ -64,7 +68,8 @@ func (a AuthRepository) Get(id uint) (response entities.Auth, err error) {
 
 	result := a.db.First(&response, "id = ?", id)
 	if result.Error != nil {
-		log.Fatal(result.Error)
+		log.Printf("auth login error: %v", err)
+		return
 	}
 
 	return

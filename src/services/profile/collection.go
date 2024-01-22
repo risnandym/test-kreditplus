@@ -2,24 +2,28 @@ package profile_service
 
 import (
 	"test-kreditplus/src/entities"
+
+	"gorm.io/gorm"
 )
 
 type ProfileService struct {
+	db          *gorm.DB
 	profileRepo ProfileRepository
 	limitRepo   LimitRepository
 }
 
-func NewProfileService(profileRepo ProfileRepository, limitRepo LimitRepository) *ProfileService {
+func NewProfileService(db *gorm.DB, profileRepo ProfileRepository, limitRepo LimitRepository) *ProfileService {
 	return &ProfileService{
+		db:          db,
 		profileRepo: profileRepo,
 		limitRepo:   limitRepo,
 	}
 }
 
 type ProfileRepository interface {
-	Create(request entities.Profile) (response *entities.Profile, err error)
+	Create(db *gorm.DB, request *entities.Profile) (response *entities.Profile, err error)
 }
 
 type LimitRepository interface {
-	Create(request entities.Limit) (response *entities.Limit, err error)
+	Create(db *gorm.DB, request *entities.Limit) (response *entities.Limit, err error)
 }

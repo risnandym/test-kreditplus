@@ -25,15 +25,15 @@ type RegisterOutput struct {
 	LastLogin time.Time `gorm:"not null;" json:"last_login"`
 }
 
-func ValidateAndBuildUserRegister(c *gin.Context) (input RegisterInput, err error) {
-	if err = c.ShouldBindJSON(&input); err != nil {
+func ValidateAndBuildUserRegister(c *gin.Context) (request RegisterInput, err error) {
+	if err = c.ShouldBindJSON(&request); err != nil {
 		return
 	}
 	return
 }
 
-func ValidateAndBuildUserLogin(c *gin.Context) (input LoginInput, err error) {
-	if err = c.ShouldBindJSON(&input); err != nil {
+func ValidateAndBuildUserLogin(c *gin.Context) (request LoginInput, err error) {
+	if err = c.ShouldBindJSON(&request); err != nil {
 		return
 	}
 	return
