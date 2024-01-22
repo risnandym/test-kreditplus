@@ -17,17 +17,18 @@ func NewCreditRepository(db *gorm.DB) (*CreditRepository, error) {
 	}, nil
 }
 
-func (t CreditRepository) Create(db *gorm.DB, request *entities.CreditTransaction) (response *entities.CreditTransaction, err error) {
+func (c CreditRepository) Create(db *gorm.DB, request *entities.Credit) (response *entities.Credit, err error) {
 
 	if db != nil {
-		t.db = db
+		c.db = db
 	}
 
 	request.CreatedAt = time.Now()
 	request.UpdatedAt = time.Now()
-	if err = t.db.Create(&request).Error; err != nil {
+	if err = c.db.Create(&request).Error; err != nil {
 		return
 	}
 
+	response = request
 	return
 }

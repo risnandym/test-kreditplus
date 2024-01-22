@@ -1,4 +1,81 @@
 definitions:
+  contract.Asset:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      type:
+        type: string
+    required:
+    - description
+    - name
+    - price
+    - type
+    type: object
+  contract.CreditInput:
+    properties:
+      assets:
+        items:
+          $ref: '#/definitions/contract.Asset'
+        type: array
+      auth_id:
+        type: integer
+      installment_period:
+        type: integer
+      otr_amount:
+        type: number
+      sales_channel:
+        type: string
+    required:
+    - assets
+    - auth_id
+    - installment_period
+    - otr_amount
+    - sales_channel
+    type: object
+  contract.CreditOutput:
+    properties:
+      admin_fee:
+        type: number
+      assets:
+        items:
+          $ref: '#/definitions/contract.Asset'
+        type: array
+      auth_id:
+        type: integer
+      contract_number:
+        type: string
+      installment_amount:
+        type: number
+      installment_period:
+        type: integer
+      interest:
+        type: number
+      limit:
+        $ref: '#/definitions/contract.Limit'
+      otr_amount:
+        type: number
+      sales_channel:
+        type: string
+      total_interest:
+        type: number
+      uuid:
+        type: string
+    type: object
+  contract.Limit:
+    properties:
+      tenor1:
+        type: number
+      tenor2:
+        type: number
+      tenor3:
+        type: number
+      tenor6:
+        type: number
+    type: object
   contract.LoginInput:
     properties:
       email:
@@ -39,6 +116,38 @@ definitions:
     - salary
     - selfie_image
     type: object
+  contract.ProfileOutput:
+    properties:
+      auth_id:
+        type: integer
+      date_of_birth:
+        type: string
+      full_name:
+        type: string
+      ktp_image:
+        type: string
+      legal_name:
+        type: string
+      limit:
+        $ref: '#/definitions/contract.Limit'
+      nik:
+        type: string
+      place_of_birth:
+        type: string
+      salary:
+        type: number
+      selfie_image:
+        type: string
+    required:
+    - date_of_birth
+    - full_name
+    - ktp_image
+    - legal_name
+    - nik
+    - place_of_birth
+    - salary
+    - selfie_image
+    type: object
   contract.RegisterInput:
     properties:
       email:
@@ -51,75 +160,6 @@ definitions:
     - email
     - password
     - phone
-    type: object
-  contract.TransactionInput:
-    properties:
-      admin_fee:
-        type: number
-      asset_id:
-        type: integer
-      auth_id:
-        type: integer
-      contract_number:
-        type: string
-      installment_amount:
-        type: number
-      installment_period:
-        type: integer
-      interest_amount:
-        type: number
-      otr_amount:
-        type: number
-      sales_channel:
-        type: string
-      uuid:
-        type: string
-    type: object
-  contract.TransactionOutput:
-    properties:
-      admin_fee:
-        type: number
-      asset_id:
-        type: integer
-      auth_id:
-        type: integer
-      contract_number:
-        type: string
-      installment_amount:
-        type: number
-      installment_period:
-        type: integer
-      interest_amount:
-        type: number
-      limit:
-        $ref: '#/definitions/entities.Limit'
-      otr_amount:
-        type: number
-      sales_channel:
-        type: string
-      uuid:
-        type: string
-    type: object
-  entities.Limit:
-    properties:
-      auth_id:
-        type: integer
-      created_at:
-        type: string
-      deleted_at:
-        type: string
-      id:
-        type: integer
-      tenor1:
-        type: number
-      tenor2:
-        type: number
-      tenor3:
-        type: number
-      tenor4:
-        type: number
-      updated_at:
-        type: string
     type: object
 info:
   contact:
@@ -134,7 +174,29 @@ info:
   title: Kredit+
   version: "1.0"
 paths:
-  /kredit-plus/customer/login:
+  /kredit-plus/customer/profile:
+    post:
+      description: Save Customer Profile.
+      parameters:
+      - description: the body to create a new Profile
+        in: body
+        name: Body
+        required: true
+        schema:
+          $ref: '#/definitions/contract.ProfileInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/contract.ProfileOutput'
+      security:
+      - kreditplus-token: []
+      summary: Create Profile.
+      tags:
+      - Customer
+  /kredit-plus/login:
     post:
       description: Logging in to get jwt token to access admin or user api by roles.
       parameters:
@@ -155,29 +217,7 @@ paths:
       summary: Login.
       tags:
       - Auth
-  /kredit-plus/customer/profile:
-    post:
-      description: Save Customer Profile.
-      parameters:
-      - description: the body to create a new Profile
-        in: body
-        name: Body
-        required: true
-        schema:
-          $ref: '#/definitions/contract.ProfileInput'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/contract.ProfileInput'
-      security:
-      - kreditplus-token: []
-      summary: Create Profile.
-      tags:
-      - Customer
-  /kredit-plus/customer/register:
+  /kredit-plus/register:
     post:
       description: registering a user from public access.
       parameters:
@@ -198,26 +238,26 @@ paths:
       summary: Register a User.
       tags:
       - Auth
-  /news:
+  /kredit-plus/transaction/credit:
     post:
-      description: Creating a new Transaction.
+      description: Creating a new Credit Transaction.
       parameters:
-      - description: the body to create a new transaction
+      - description: the body to create a new credit transaction
         in: body
         name: Body
         required: true
         schema:
-          $ref: '#/definitions/contract.TransactionInput'
+          $ref: '#/definitions/contract.CreditInput'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/contract.TransactionOutput'
+            $ref: '#/definitions/contract.CreditOutput'
       security:
       - kreditplus-token: []
-      summary: Create New Transaction. (Admin only)
+      summary: Create New Credit Transaction. (Admin only)
       tags:
       - Transaction
 securityDefinitions:

@@ -17,7 +17,11 @@ func NewLimitRepository(db *gorm.DB) (*LimitRepository, error) {
 	}, nil
 }
 
-func (l LimitRepository) Create(request entities.Limit) (response *entities.Limit, err error) {
+func (l LimitRepository) Create(db *gorm.DB, request *entities.Limit) (response *entities.Limit, err error) {
+
+	if db != nil {
+		l.db = db
+	}
 
 	request.CreatedAt = time.Now()
 	request.UpdatedAt = time.Now()
@@ -25,11 +29,12 @@ func (l LimitRepository) Create(request entities.Limit) (response *entities.Limi
 		return
 	}
 
-	response = &request
+	response = request
 	return
 }
 
 func (l LimitRepository) Update(db *gorm.DB, request *entities.Limit) (response *entities.Limit, err error) {
+
 	if db != nil {
 		l.db = db
 	}
@@ -45,7 +50,7 @@ func (l LimitRepository) Update(db *gorm.DB, request *entities.Limit) (response 
 
 func (l LimitRepository) Get(id uint) (response *entities.Limit, err error) {
 
-	if err = l.db.Where("id = ?", id).First(&response).Error; err != nil {
+	if err = l.db.Where("auth_id = ?", id).First(&response).Error; err != nil {
 		return
 	}
 

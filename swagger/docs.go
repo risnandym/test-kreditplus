@@ -24,7 +24,43 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/kredit-plus/customer/login": {
+        "/kredit-plus/customer/profile": {
+            "post": {
+                "security": [
+                    {
+                        "kreditplus-token": []
+                    }
+                ],
+                "description": "Save Customer Profile.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customer"
+                ],
+                "summary": "Create Profile.",
+                "parameters": [
+                    {
+                        "description": "the body to create a new Profile",
+                        "name": "Body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contract.ProfileInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/contract.ProfileOutput"
+                        }
+                    }
+                }
+            }
+        },
+        "/kredit-plus/login": {
             "post": {
                 "description": "Logging in to get jwt token to access admin or user api by roles.",
                 "produces": [
@@ -56,43 +92,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/kredit-plus/customer/profile": {
-            "post": {
-                "security": [
-                    {
-                        "kreditplus-token": []
-                    }
-                ],
-                "description": "Save Customer Profile.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Customer"
-                ],
-                "summary": "Create Profile.",
-                "parameters": [
-                    {
-                        "description": "the body to create a new Profile",
-                        "name": "Body",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/contract.ProfileInput"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/contract.ProfileInput"
-                        }
-                    }
-                }
-            }
-        },
-        "/kredit-plus/customer/register": {
+        "/kredit-plus/register": {
             "post": {
                 "description": "registering a user from public access.",
                 "produces": [
@@ -124,29 +124,29 @@ const docTemplate = `{
                 }
             }
         },
-        "/news": {
+        "/kredit-plus/transaction/credit": {
             "post": {
                 "security": [
                     {
                         "kreditplus-token": []
                     }
                 ],
-                "description": "Creating a new Transaction.",
+                "description": "Creating a new Credit Transaction.",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Transaction"
                 ],
-                "summary": "Create New Transaction. (Admin only)",
+                "summary": "Create New Credit Transaction. (Admin only)",
                 "parameters": [
                     {
-                        "description": "the body to create a new transaction",
+                        "description": "the body to create a new credit transaction",
                         "name": "Body",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/contract.TransactionInput"
+                            "$ref": "#/definitions/contract.CreditInput"
                         }
                     }
                 ],
@@ -154,7 +154,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/contract.TransactionOutput"
+                            "$ref": "#/definitions/contract.CreditOutput"
                         }
                     }
                 }
@@ -162,6 +162,120 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "contract.Asset": {
+            "type": "object",
+            "required": [
+                "description",
+                "name",
+                "price",
+                "type"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.CreditInput": {
+            "type": "object",
+            "required": [
+                "assets",
+                "auth_id",
+                "installment_period",
+                "otr_amount",
+                "sales_channel"
+            ],
+            "properties": {
+                "assets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/contract.Asset"
+                    }
+                },
+                "auth_id": {
+                    "type": "integer"
+                },
+                "installment_period": {
+                    "type": "integer"
+                },
+                "otr_amount": {
+                    "type": "number"
+                },
+                "sales_channel": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.CreditOutput": {
+            "type": "object",
+            "properties": {
+                "admin_fee": {
+                    "type": "number"
+                },
+                "assets": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/contract.Asset"
+                    }
+                },
+                "auth_id": {
+                    "type": "integer"
+                },
+                "contract_number": {
+                    "type": "string"
+                },
+                "installment_amount": {
+                    "type": "number"
+                },
+                "installment_period": {
+                    "type": "integer"
+                },
+                "interest": {
+                    "type": "number"
+                },
+                "limit": {
+                    "$ref": "#/definitions/contract.Limit"
+                },
+                "otr_amount": {
+                    "type": "number"
+                },
+                "sales_channel": {
+                    "type": "string"
+                },
+                "total_interest": {
+                    "type": "number"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "contract.Limit": {
+            "type": "object",
+            "properties": {
+                "tenor1": {
+                    "type": "number"
+                },
+                "tenor2": {
+                    "type": "number"
+                },
+                "tenor3": {
+                    "type": "number"
+                },
+                "tenor6": {
+                    "type": "number"
+                }
+            }
+        },
         "contract.LoginInput": {
             "type": "object",
             "required": [
@@ -219,6 +333,51 @@ const docTemplate = `{
                 }
             }
         },
+        "contract.ProfileOutput": {
+            "type": "object",
+            "required": [
+                "date_of_birth",
+                "full_name",
+                "ktp_image",
+                "legal_name",
+                "nik",
+                "place_of_birth",
+                "salary",
+                "selfie_image"
+            ],
+            "properties": {
+                "auth_id": {
+                    "type": "integer"
+                },
+                "date_of_birth": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                },
+                "ktp_image": {
+                    "type": "string"
+                },
+                "legal_name": {
+                    "type": "string"
+                },
+                "limit": {
+                    "$ref": "#/definitions/contract.Limit"
+                },
+                "nik": {
+                    "type": "string"
+                },
+                "place_of_birth": {
+                    "type": "string"
+                },
+                "salary": {
+                    "type": "number"
+                },
+                "selfie_image": {
+                    "type": "string"
+                }
+            }
+        },
         "contract.RegisterInput": {
             "type": "object",
             "required": [
@@ -234,111 +393,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "phone": {
-                    "type": "string"
-                }
-            }
-        },
-        "contract.TransactionInput": {
-            "type": "object",
-            "properties": {
-                "admin_fee": {
-                    "type": "number"
-                },
-                "asset_id": {
-                    "type": "integer"
-                },
-                "auth_id": {
-                    "type": "integer"
-                },
-                "contract_number": {
-                    "type": "string"
-                },
-                "installment_amount": {
-                    "type": "number"
-                },
-                "installment_period": {
-                    "type": "integer"
-                },
-                "interest_amount": {
-                    "type": "number"
-                },
-                "otr_amount": {
-                    "type": "number"
-                },
-                "sales_channel": {
-                    "type": "string"
-                },
-                "uuid": {
-                    "type": "string"
-                }
-            }
-        },
-        "contract.TransactionOutput": {
-            "type": "object",
-            "properties": {
-                "admin_fee": {
-                    "type": "number"
-                },
-                "asset_id": {
-                    "type": "integer"
-                },
-                "auth_id": {
-                    "type": "integer"
-                },
-                "contract_number": {
-                    "type": "string"
-                },
-                "installment_amount": {
-                    "type": "number"
-                },
-                "installment_period": {
-                    "type": "integer"
-                },
-                "interest_amount": {
-                    "type": "number"
-                },
-                "limit": {
-                    "$ref": "#/definitions/entities.Limit"
-                },
-                "otr_amount": {
-                    "type": "number"
-                },
-                "sales_channel": {
-                    "type": "string"
-                },
-                "uuid": {
-                    "type": "string"
-                }
-            }
-        },
-        "entities.Limit": {
-            "type": "object",
-            "properties": {
-                "auth_id": {
-                    "type": "integer"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "deleted_at": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "tenor1": {
-                    "type": "number"
-                },
-                "tenor2": {
-                    "type": "number"
-                },
-                "tenor3": {
-                    "type": "number"
-                },
-                "tenor4": {
-                    "type": "number"
-                },
-                "updated_at": {
                     "type": "string"
                 }
             }

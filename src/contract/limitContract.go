@@ -1,21 +1,19 @@
-package entities
+package contract
 
 import (
 	"errors"
 	"log"
+	"test-kreditplus/src/entities"
 )
 
 type Limit struct {
-	IDForm
-	AuthID uint    `json:"auth_id"`
 	Tenor1 float64 `json:"tenor1"`
 	Tenor2 float64 `json:"tenor2"`
 	Tenor3 float64 `json:"tenor3"`
-	Tenor6 float64 `json:"tenor4"`
-	TimeStamp
+	Tenor6 float64 `json:"tenor6"`
 }
 
-func CalculateLimit(l *Limit, amount float64, tenor int) (*Limit, error) {
+func CalculateLimit(l *entities.Limit, amount float64, tenor int) (*entities.Limit, error) {
 
 	var err error
 	var limitOnInstallment float64
@@ -31,24 +29,16 @@ func CalculateLimit(l *Limit, amount float64, tenor int) (*Limit, error) {
 		limitOnInstallment = l.Tenor6
 	}
 
-	log.Print(l)
-
 	if amount > limitOnInstallment {
 		err = errors.New("transaksi melebihi limit pinjaman")
 		log.Println(err)
 		return l, err
 	}
 
-	l.Tenor1 -= limitOnInstallment
-	log.Print(l.Tenor1, limitOnInstallment)
-	l.Tenor2 -= limitOnInstallment
-	log.Print(l.Tenor2, limitOnInstallment)
-	l.Tenor3 -= limitOnInstallment
-	log.Print(l.Tenor3, limitOnInstallment)
-	l.Tenor6 -= limitOnInstallment
-	log.Print(l.Tenor6, limitOnInstallment)
-
-	log.Print(l)
+	l.Tenor1 -= amount
+	l.Tenor2 -= amount
+	l.Tenor3 -= amount
+	l.Tenor6 -= amount
 
 	if l.Tenor1 < 0 {
 		l.Tenor1 = 0
@@ -61,9 +51,6 @@ func CalculateLimit(l *Limit, amount float64, tenor int) (*Limit, error) {
 	if l.Tenor3 < 0 {
 		l.Tenor3 = 0
 	}
-
-	log.Print(l)
-	log.Print(3)
 
 	return l, nil
 }

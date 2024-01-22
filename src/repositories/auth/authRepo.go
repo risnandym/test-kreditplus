@@ -25,7 +25,7 @@ func NewAuthRepository(db *gorm.DB, config config.Configuration) (*AuthRepositor
 }
 
 func (a AuthRepository) Create(request entities.Auth) (response *entities.Auth, err error) {
-
+	log.Println(a.db)
 	request.UUID = uuid.New()
 	request.CreatedAt = time.Now()
 	request.UpdatedAt = time.Now()

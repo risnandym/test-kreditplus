@@ -17,7 +17,11 @@ func NewProfileRepository(db *gorm.DB) (*ProfileRepository, error) {
 	}, nil
 }
 
-func (p ProfileRepository) Create(request entities.Profile) (response *entities.Profile, err error) {
+func (p ProfileRepository) Create(db *gorm.DB, request *entities.Profile) (response *entities.Profile, err error) {
+
+	if db != nil {
+		p.db = db
+	}
 
 	request.CreatedAt = time.Now()
 	request.UpdatedAt = time.Now()

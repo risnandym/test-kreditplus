@@ -25,13 +25,14 @@ func SetupRouter(app *Dependency) *gin.Engine {
 		})
 	})
 
-	base := r.Group("/kredit-plus/customer")
+	base := r.Group("/kredit-plus")
 	base.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	base.POST("/register", handlers.Register(app.Services.AuthSVC))
 	base.POST("/login", handlers.Login(app.Services.AuthSVC))
 
-	profile := base.Group("/profile")
-	profile.Use(middlewares.PublicMiddleware(app.Services.AuthSVC))
+	base.Use(middlewares.PublicMiddleware(app.Services.AuthSVC))
+
+	profile := base.Group("/customer/profile")
 	profile.POST("/", handlers.CreateProfile(app.Services.ProfileSVC))
 
 	Transaction := base.Group("/transaction")

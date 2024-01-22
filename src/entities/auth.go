@@ -17,10 +17,11 @@ type Auth struct {
 	LastLogin time.Time `gorm:"not null;" json:"last_login"`
 	TimeStamp
 
-	Limit             Limit               `json:"-"`
-	Profile           Profile             `json:"-"`
-	CreditTransaction []CreditTransaction `json:"-"`
-	Asset             []Asset             `json:"-"`
+	Limit   Limit    `json:"-"`
+	Profile Profile  `json:"-"`
+	Credit  []Credit `json:"-"`
+	Debit   []Debit  `json:"-"`
+	Asset   []Asset  `json:"-"`
 }
 
 func (a *Auth) SaveUser(db *gorm.DB) (*Auth, error) {

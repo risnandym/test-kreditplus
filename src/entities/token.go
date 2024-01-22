@@ -1,10 +1,12 @@
 package entities
 
-import "time"
+import (
+	"time"
+)
 
 type Token struct {
 	IDForm
-	AuthID                int       `json:"auth_id"`
+	AuthID                uint      `json:"auth_id"`
 	AccessToken           string    `json:"access_token"`
 	RefreshToken          string    `json:"refresh_token"`
 	UserAgent             string    `json:"user_agent"`

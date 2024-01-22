@@ -12,9 +12,10 @@ type AuthService interface {
 }
 
 type ProfileService interface {
-	Create(request contract.ProfileInput) (response *contract.ProfileInput, err error)
+	Create(request contract.ProfileInput) (response *contract.ProfileOutput, err error)
 }
 
 type TransactionService interface {
-	Credit(request contract.TransactionInput) (response *contract.TransactionOutput, err error)
+	Credit(request contract.CreditInput) (response *contract.CreditOutput, err error)
+	// Debit(request contract.CreditInput) (response *contract.CreditOutput, err error)
 }

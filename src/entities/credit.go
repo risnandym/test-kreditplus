@@ -1,20 +1,15 @@
 package entities
 
-import "github.com/google/uuid"
-
-type CreditTransaction struct {
+type Credit struct {
 	IDForm
-	UUID              uuid.UUID `json:"uuid"`
-	AuthID            int       `json:"auth_id"`
-	AssetID           *int      `json:"asset_id"`
-	ContractNumber    string    `json:"contract_number"`
-	OTRAmount         float32   `json:"otr_amount"`
-	AdminFee          float32   `json:"admin_fee"`
-	InstallmentAmount float32   `json:"installment_amount"`
-	InstallmentPeriod int       `json:"installment_period"`
-	InterestAmount    float32   `json:"interest_amount"`
-	SalesChannel      string    `json:"sales_channel"`
+	AuthID            uint    `json:"auth_id"`
+	ContractNumber    string  `json:"contract_number"`
+	OTRAmount         float64 `json:"otr_amount"`
+	AdminFee          float64 `json:"admin_fee"`
+	InstallmentAmount float64 `json:"installment_amount"`
+	InstallmentPeriod int     `json:"installment_period"`
+	Interest          float64 `json:"interest"`
+	TotalInterest     float64 `json:"total_interest"`
+	SalesChannel      string  `json:"sales_channel"`
 	TimeStamp
-
-	Asset Asset `json:"-"`
 }
